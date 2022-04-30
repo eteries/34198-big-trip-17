@@ -1,4 +1,4 @@
-import { Mock } from '../constants';
+import { Mock } from '../mock';
 import { generatePoint } from '../mock/point';
 
 export default class TripModel {

@@ -1,6 +1,7 @@
 import { getRandomArrayElement, getRandomSubPhrase } from '../utils/random.js';
+
+import { Mock } from './index';
 import { MOCK_TEXT } from './text.js';
-import { Mock } from '../constants';
 
 export function generateDestination () {
   return {
