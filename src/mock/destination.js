@@ -1,11 +1,10 @@
-import { getRandomArrayElement, getRandomSubPhrase } from '../utils/random.js';
+import { getRandomSubPhrase } from '../utils/random.js';
 
-import { Mock } from './index';
 import { MOCK_TEXT } from './text.js';
 
-export function generateDestination () {
-  return {
-    name: getRandomArrayElement(Mock.CITIES),
+export const generateDestination = (city) => (
+  {
+    name: city,
     description: getRandomSubPhrase(MOCK_TEXT),
     pictures: [
       {
@@ -17,5 +16,5 @@ export function generateDestination () {
         description: getRandomSubPhrase(MOCK_TEXT),
       },
     ],
-  };
-}
+  }
+);

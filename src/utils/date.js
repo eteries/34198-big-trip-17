@@ -29,4 +29,6 @@ const addTimeInterval = (date, interval, unit) => dayjs(date).add(interval, unit
 
 const subtractTimeInterval = (date, interval, unit) => dayjs(date).subtract(interval, unit).toISOString();
 
-export { addTimeInterval, getDuration, formatDate, formatPointDuration, subtractTimeInterval };
+const getToday = () => dayjs().startOf('date').toISOString();
+
+export { addTimeInterval, getDuration, getToday, formatDate, formatPointDuration, subtractTimeInterval };

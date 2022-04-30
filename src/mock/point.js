@@ -6,7 +6,6 @@ import {
   getRandomSubArray,
   getUniqueRandomInt
 } from '../utils/random.js';
-import { getOffersByType } from '../utils/filter';
 
 import { generateEndDate, generateStartDate } from './date';
 import { generateDestination } from './destination';
@@ -16,7 +15,7 @@ export function generatePoint() {
   const dateFrom = generateStartDate();
   const dateTo = generateEndDate(dateFrom);
   const type = getRandomArrayElement(POINT_TYPES);
-  const availableOffers = getOffersByType(offers, type);
+  const availableOffers = offers.filter((offer) => offer.type === type);
   const selectedOffers = availableOffers.length ? getRandomSubArray(availableOffers) : [];
 
   return {

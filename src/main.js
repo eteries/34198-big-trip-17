@@ -1,4 +1,6 @@
+import DestinationsModel from './model/destinations-model';
 import TripModel from './model/trip-model';
+import OffersModel from './model/offers-model';
 import TripPresenter from './presenter/trip-presenter';
 import { render } from './render';
 import CostView from './view/cost/cost-view';
@@ -8,6 +10,8 @@ import RouteView from './view/route/route-view';
 
 const tripPresenter = new TripPresenter();
 const tripModel = new TripModel();
+const destinationsModel = new DestinationsModel();
+const offersModel = new OffersModel();
 
 const tripInfoElement = document.querySelector('.trip-info');
 const filtersElement = document.querySelector('.trip-controls__filters');
@@ -19,4 +23,4 @@ render(new CostView(), tripInfoElement);
 render(new NewPointButtonView(), mainElement);
 render(new FiltersView(), filtersElement);
 
-tripPresenter.init(eventsElement, tripModel);
+tripPresenter.init(eventsElement, tripModel, destinationsModel, offersModel);
