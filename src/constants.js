@@ -12,6 +12,7 @@ export const Mock = {
     'Chamonix',
     'Amsterdam',
   ],
+  POINTS_NUM: 22
 };
 
 export const POINT_TYPES = [
