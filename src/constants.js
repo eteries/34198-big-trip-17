@@ -1,20 +1,3 @@
-export const Mock = {
-  Id: {
-    MIN: 1,
-    MAX: 9999,
-  },
-  Price: {
-    MIN: 50,
-    MAX: 1500,
-  },
-  CITIES: [
-    'Geneva',
-    'Chamonix',
-    'Amsterdam',
-  ],
-  POINTS_NUM: 22
-};
-
 export const POINT_TYPES = [
   'Taxi',
   'Bus',
