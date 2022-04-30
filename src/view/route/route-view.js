@@ -1,12 +1,6 @@
-import { createElement } from '../render.js';
+import { createElement } from '../../render';
 
-const createRouteTemplate = () => (
-  `<div class="trip-info__main">
-    <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
-
-    <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
-  </div>`
-);
+import { createRouteTemplate } from './route.tpl';
 
 export default class RouteView {
   getTemplate() {

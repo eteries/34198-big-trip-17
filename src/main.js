@@ -1,10 +1,10 @@
 import TripModel from './model/trip-model';
 import TripPresenter from './presenter/trip-presenter';
-import { render } from './render.js';
-import CostView from './view/cost-view.js';
-import FiltersView from './view/filters-view.js';
-import NewPointButtonView from './view/new-point-button-view.js';
-import RouteView from './view/route-view.js';
+import { render } from './render';
+import CostView from './view/cost/cost-view';
+import FiltersView from './view/filters/filters-view';
+import NewPointButtonView from './view/new-point-button/new-point-button-view';
+import RouteView from './view/route/route-view';
 
 const tripPresenter = new TripPresenter();
 const tripModel = new TripModel();

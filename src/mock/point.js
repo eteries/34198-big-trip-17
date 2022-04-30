@@ -1,6 +1,5 @@
-import { Mock, POINT_TYPES } from '../constants';
-import { generateDestination } from './destination.js';
-import { offers } from './offer.js';
+import { POINT_TYPES } from '../constants';
+import { Mock } from '../mock';
 import {
   getRandomArrayElement,
   getRandomInt,
@@ -8,7 +7,10 @@ import {
   getUniqueRandomInt
 } from '../utils/random.js';
 import { getOffersByType } from '../utils/filter';
+
 import { generateEndDate, generateStartDate } from './date';
+import { generateDestination } from './destination';
+import { offers } from './offer';
 
 export function generatePoint() {
   const dateFrom = generateStartDate();

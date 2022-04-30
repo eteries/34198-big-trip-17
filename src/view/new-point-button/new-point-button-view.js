@@ -1,6 +1,6 @@
-import { createElement } from '../render.js';
+import { createElement } from '../../render';
 
-const createNewPointButtonTemplate = () => '<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>';
+import { createNewPointButtonTemplate } from './new-point-button.tpl';
 
 export default class NewPointButtonView {
   getTemplate() {

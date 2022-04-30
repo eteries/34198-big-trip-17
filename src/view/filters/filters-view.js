@@ -1,10 +1,10 @@
-import { createElement } from '../render.js';
+import { createElement } from '../../render';
 
-const createLoadingTemplate = () => '<p class="trip-events__msg">Loading...</p>';
+import { createFiltersTemplate } from './filters.tpl';
 
-export default class LoadingView {
+export default class FiltersView {
   getTemplate() {
-    return createLoadingTemplate();
+    return createFiltersTemplate();
   }
 
   getElement() {

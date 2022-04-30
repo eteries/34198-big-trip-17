@@ -1,10 +1,6 @@
-import { createElement } from '../render.js';
+import { createElement } from '../../render';
 
-const createCostTemplate = () => (
-  `<p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-  </p>`
-);
+import { createCostTemplate } from './cost.tpl';
 
 export default class CostView {
   getTemplate() {
