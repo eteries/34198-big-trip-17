@@ -63,4 +63,14 @@ export const offers = [
       },
     ],
   },
+  {
+    'type': 'Restaurant',
+    'offers': [
+      {
+        'id': 1,
+        'title': 'Enter without waiting',
+        'price': 100
+      }
+    ]
+  }
 ];

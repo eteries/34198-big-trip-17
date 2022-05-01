@@ -3,8 +3,13 @@ import { createElement } from '../../render';
 import { createFiltersTemplate } from './filters.tpl';
 
 export default class FiltersView {
+  constructor(filters, activeFilter) {
+    this.filters = filters;
+    this.activeFilter = activeFilter;
+  }
+
   getTemplate() {
-    return createFiltersTemplate();
+    return createFiltersTemplate(this.filters, this.activeFilter);
   }
 
   getElement() {

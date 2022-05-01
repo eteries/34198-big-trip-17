@@ -1,3 +1,9 @@
+export const Filter = {
+  Everything: 'everything',
+  Future: 'future',
+  Past: 'past',
+};
+
 export const POINT_TYPES = [
   'Taxi',
   'Bus',
