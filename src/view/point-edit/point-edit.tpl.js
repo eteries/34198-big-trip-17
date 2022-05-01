@@ -1,6 +1,6 @@
 import { POINT_TYPES } from '../../constants.js';
 import { formatDate, getToday } from '../../utils/date';
-import { filterOffers } from '../../utils/filter';
+import { getOffersByType } from '../../utils/filter';
 
 const createPointTypeTemplate = (type, currentType) => {
   const checked = type === currentType ? 'checked' : '';
@@ -98,7 +98,7 @@ export const createPointEditTemplate = (point = {}, destinations = [], offers = 
   } = point;
 
   const typesTemplate = createPointTypesTemplate(POINT_TYPES, type);
-  const availableOffers = filterOffers(offers, type);
+  const availableOffers = getOffersByType(offers, type);
   const offersTemplate = createOffersTemplate(availableOffers, selectedOffers);
 
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);

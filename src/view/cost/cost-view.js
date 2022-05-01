@@ -3,8 +3,12 @@ import { createElement } from '../../render';
 import { createCostTemplate } from './cost.tpl';
 
 export default class CostView {
+  constructor(cost) {
+    this.cost = cost;
+  }
+
   getTemplate() {
-    return createCostTemplate();
+    return createCostTemplate(this.cost);
   }
 
   getElement() {
