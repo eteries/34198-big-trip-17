@@ -7,11 +7,11 @@ export const offers = [
         'title': 'Upgrade to a business class',
         'price': 120,
       }, {
-        'id': 4,
+        'id': 2,
         'title': 'Add a meal',
         'price': 15,
       }, {
-        'id': 5,
+        'id': 3,
         'title': 'Choose a seat',
         'price': 10,
       },
@@ -21,15 +21,15 @@ export const offers = [
     'type': 'Taxi',
     'offers': [
       {
-        'id': 2,
+        'id': 1,
         'title': 'Choose the radio station',
         'price': 60,
       }, {
-        'id': 3,
+        'id': 2,
         'title': 'Order Uber',
         'price': 20,
       }, {
-        'id': 10,
+        'id': 3,
         'title': 'Meet at the gate',
         'price': 30,
       },
@@ -39,11 +39,11 @@ export const offers = [
     'type': 'Bus',
     'offers': [
       {
-        'id': 6,
+        'id': 1,
         'title': 'Choose a seat',
         'price': 5,
       }, {
-        'id': 7,
+        'id': 2,
         'title': 'Add a meal',
         'price': 12,
       },
@@ -53,11 +53,11 @@ export const offers = [
     'type': 'Train',
     'offers': [
       {
-        'id': 8,
+        'id': 1,
         'title': 'Order a tea',
         'price': 3,
       }, {
-        'id': 9,
+        'id': 2,
         'title': 'Add bedsheets',
         'price': 10,
       },

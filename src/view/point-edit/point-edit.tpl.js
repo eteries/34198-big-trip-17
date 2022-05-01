@@ -18,18 +18,19 @@ const createPointTypesTemplate = (types, currentType) => (
     .join('')
 );
 
-const createOfferTemplate = (offer, selectedOffers) => {
-  const {id, title, price} = offer;
-  const isAlreadySelected = selectedOffers.some((selected) => title === selected.title);
+const createOfferTemplate = (currentOffer, selectedOffers) => {
+  const {id, title, price} = currentOffer;
+  const isAlreadySelected = selectedOffers.find((selected) => title === selected.title);
 
   return (
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden"
              id="event-offer-${id}"
              type="checkbox"
-             name="event-offer-${id}"
+             name="event-offer"
+             value="${id}"
              ${isAlreadySelected ? 'checked' : ''}>
-      <label class="event__offer-label" for="event-offer-meal-1">
+      <label class="event__offer-label" for="event-offer-${id}">
         <span class="event__offer-title">${title}</span>
           &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
@@ -38,17 +39,53 @@ const createOfferTemplate = (offer, selectedOffers) => {
   );
 };
 
-const createOffersTemplate = (availableOffers, selectedOffers) => (
-  availableOffers
-    .map((offer) => createOfferTemplate(offer, selectedOffers))
-    .join('')
-);
+const createOffersTemplate = (availableOffers, selectedOffers) => {
+  if (availableOffers.length === 0) {
+    return '';
+  }
 
-const createDestinationsTemplate = (destinations) => (
+  const offersListTemplate = availableOffers
+    .map((offer) => createOfferTemplate(offer, selectedOffers))
+    .join('');
+
+  return `
+    <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+        ${offersListTemplate}
+      </div>
+    </section>`;
+};
+
+const createDestinationOptionsTemplate = (destinations) => (
   destinations
     .map(({name}) => `<option value="${name}"></option>`)
     .join('')
 );
+
+const createPicturesTemplate = (pictures) => (
+  pictures.map(({src, description}) => `<img class="event__photo" src="${src}" alt="${description}">`).join('')
+);
+
+const createDestinationsTemplate = (destination) => {
+  if (!destination) {
+    return  '';
+  }
+
+  const picturesTemplate = createPicturesTemplate(destination.pictures);
+
+  return (
+    `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destination.description}</p>
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${picturesTemplate}
+        </div>
+      </div>
+    </section>`
+  );
+};
 
 export const createPointEditTemplate = (point = {}, destinations = [], offers = []) => {
   const {
@@ -56,16 +93,16 @@ export const createPointEditTemplate = (point = {}, destinations = [], offers = 
     dateFrom = getToday(),
     dateTo = getToday(),
     basePrice = 0,
-    selectedOffers = [],
-    destination = destinations[0],
+    offers: selectedOffers = [],
+    destination,
   } = point;
 
-  const {description: destinationDescription} = destination;
-
   const typesTemplate = createPointTypesTemplate(POINT_TYPES, type);
-  const destinationsTemplate = createDestinationsTemplate(destinations);
   const availableOffers = filterOffers(offers, type);
   const offersTemplate = createOffersTemplate(availableOffers, selectedOffers);
+
+  const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);
+  const destinationsTemplate = createDestinationsTemplate(destination);
 
   const dateFromValue = formatDate(dateFrom, 'DD/MM/YY HH:mm');
   const dateToValue = formatDate(dateTo, 'DD/MM/YY HH:mm');
@@ -95,7 +132,7 @@ export const createPointEditTemplate = (point = {}, destinations = [], offers = 
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Chamonix" list="destination-list-1">
             <datalist id="destination-list-1">
-              ${destinationsTemplate}
+              ${destinationOptionsTemplate}
             </datalist>
           </div>
 
@@ -122,18 +159,8 @@ export const createPointEditTemplate = (point = {}, destinations = [], offers = 
           </button>
         </header>
         <section class="event__details">
-          <section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-            <div class="event__available-offers">
-              ${offersTemplate}
-            </div>
-          </section>
-
-          <section class="event__section  event__section--destination">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${destinationDescription}</p>
-          </section>
+          ${offersTemplate}
+          ${destinationsTemplate}
         </section>
       </form>
     </li>`

@@ -1,4 +1,5 @@
 import { formatDate, formatPointDuration, getDuration } from '../../utils/date';
+import { POINT_TYPES } from '../../constants';
 
 const createOfferItemTemplate = ({title, price}) => (
   `<li class="event__offer">
@@ -15,8 +16,15 @@ const offersTemplate = (offers) => (
 );
 
 export const createPointTemplate = (point) => {
-  const {dateFrom, dateTo, type, destination, basePrice, offers, isFavorite} = point;
-  const {name: destinationName} = destination;
+  const {
+    dateFrom,
+    dateTo,
+    type = POINT_TYPES[0],
+    destination = {},
+    basePrice = 0,
+    offers = [],
+    isFavorite} = point;
+  const {name: destinationName = ''} = destination;
 
   const dateFromAttr = formatDate(dateFrom, 'YYYY-MM-DD');
   const timeFrom = formatDate(dateFrom, 'HH:mm');
