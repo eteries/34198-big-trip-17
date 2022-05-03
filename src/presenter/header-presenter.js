@@ -12,7 +12,7 @@ export default class HeaderPresenter {
 
     this.tripModel = tripModel;
 
-    this.points = [...this.tripModel.getPoints()];
+    this.points = [...this.tripModel.points];
 
     this.cost = calculateCost(this.points);
     this.uniqueDestinations = getUniqueDestinations(this.points);
