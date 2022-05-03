@@ -1,10 +1,10 @@
-import { createElement } from '../render.js';
+import { createElement } from '../../render';
 
-const createPointsTemplate = () => '<ul class="trip-events__list"></ul>';
+import { createSortingTemplate } from './sorting.tpl';
 
-export default class PointsView {
+export default class SortingView {
   getTemplate() {
-    return createPointsTemplate();
+    return createSortingTemplate();
   }
 
   getElement() {
