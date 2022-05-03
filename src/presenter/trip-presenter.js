@@ -3,6 +3,7 @@ import PointsView from '../view/points/points-view';
 import PointEditView from '../view/point-edit/point-edit-view';
 import PointView from '../view/point/point-view';
 import SortingView from '../view/sorting/sorting-view';
+import { isEscapeKey } from '../utils/dom';
 
 export default class TripPresenter {
   #tripContainer;
@@ -30,13 +31,47 @@ export default class TripPresenter {
     render(new SortingView(), this.#tripContainer);
     render(this.#pointsComponent, this.#tripContainer);
 
-    for (let i = 0; i < this.#points.length; i++) {
-      if (i === 0) {
-        render(new PointEditView(this.#points[i], this.#destinations, this.#offers), this.#pointsComponent.element);
-        continue;
-      }
+    this.#points.forEach(this.#renderPoint, this);
+  }
 
-      render(new PointView(this.#points[i]), this.#pointsComponent.element);
-    }
+  #renderPoint(point) {
+    const pointComponent = new PointView(point);
+    const pointEditComponent = new PointEditView(point, this.#destinations, this.#offers);
+
+    const openButton = pointComponent.element.querySelector('.event__rollup-btn');
+    const closeButton = pointEditComponent.element.querySelector('.event__rollup-btn');
+    const editForm = pointEditComponent.element.querySelector('.event--edit');
+
+    const openEditor = () => {
+      pointComponent.element.replaceWith(pointEditComponent.element);
+    };
+
+    const closeEditor = () => {
+      pointEditComponent.element.replaceWith(pointComponent.element);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (isEscapeKey(evt)) {
+        closeEditor();
+      }
+    };
+
+    openButton.addEventListener('click', () => {
+      openEditor();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    closeButton.addEventListener('click', () => {
+      closeEditor();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    editForm.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      closeEditor();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    render(pointComponent, this.#pointsComponent.element);
   }
 }
