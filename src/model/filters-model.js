@@ -1,10 +1,14 @@
 import { Filter } from '../constants';
 
 export default class FiltersModel {
-  filters = Object.values(Filter);
-  activeFilter = Filter.Everything;
+  #filters = Object.values(Filter);
+  #activeFilter = Filter.Everything;
 
-  getFilters = () => this.filters;
+  get filters() {
+    return this.#filters;
+  }
 
-  getActiveFilter = () => this.activeFilter;
+  get activeFilter() {
+    return this.#activeFilter;
+  }
 }

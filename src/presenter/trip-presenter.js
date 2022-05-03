@@ -5,29 +5,38 @@ import PointView from '../view/point/point-view';
 import SortingView from '../view/sorting/sorting-view';
 
 export default class TripPresenter {
-  pointsComponent = new PointsView();
+  #tripContainer;
+  #pointsComponent = new PointsView();
 
-  init = (tripContainer, tripModel, destinationsModel, offersModel) => {
-    this.tripContainer = tripContainer;
+  #destinationsModel;
+  #offersModel;
+  #tripModel;
 
-    this.tripModel = tripModel;
-    this.destinationsModel = destinationsModel;
-    this.offersModel = offersModel;
+  #points;
+  #destinations;
+  #offers;
 
-    this.points = [...this.tripModel.getPoints()];
-    this.destinations = [...this.destinationsModel.getDestinations()];
-    this.offers = [...this.offersModel.getOffers()];
+  init(tripContainer, tripModel, destinationsModel, offersModel) {
+    this.#tripContainer = tripContainer;
 
-    render(new SortingView(), this.tripContainer);
-    render(this.pointsComponent, this.tripContainer);
+    this.#tripModel = tripModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
 
-    for (let i = 0; i < this.points.length; i++) {
+    this.#points = [...this.#tripModel.points];
+    this.#destinations = [...this.#destinationsModel.destinations];
+    this.#offers = [...this.#offersModel.offers];
+
+    render(new SortingView(), this.#tripContainer);
+    render(this.#pointsComponent, this.#tripContainer);
+
+    for (let i = 0; i < this.#points.length; i++) {
       if (i === 0) {
-        render(new PointEditView(this.points[i], this.destinations, this.offers), this.pointsComponent.getElement());
+        render(new PointEditView(this.#points[i], this.#destinations, this.#offers), this.#pointsComponent.element);
         continue;
       }
 
-      render(new PointView(this.points[i]), this.pointsComponent.getElement());
+      render(new PointView(this.#points[i]), this.#pointsComponent.element);
     }
-  };
+  }
 }

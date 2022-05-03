@@ -2,13 +2,13 @@ import { render } from '../render';
 import FiltersView from '../view/filters/filters-view';
 
 export default class FiltersPresenter {
-  init = (filtersContainer, filtersModel) => {
+  init(filtersContainer, filtersModel) {
     this.filtersContainer = filtersContainer;
 
     this.filtersModel = filtersModel;
-    this.filters = [...this.filtersModel.getFilters()];
-    this.activeFilter = this.filtersModel.getActiveFilter();
+    this.filters = [...this.filtersModel.filters];
+    this.activeFilter = this.filtersModel.activeFilter;
 
     render(new FiltersView(this.filters, this.activeFilter), this.filtersContainer);
-  };
+  }
 }
