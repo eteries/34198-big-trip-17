@@ -1,23 +1,9 @@
-import { createElement } from '../../render';
+import AbstractView from '../../framework/view/abstract-view';
 
 import { createNewPointButtonTemplate } from './new-point-button.tpl';
 
-export default class NewPointButtonView {
-  #element = null;
-
+export default class NewPointButtonView extends AbstractView {
   get template() {
     return createNewPointButtonTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

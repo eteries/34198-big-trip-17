@@ -1,14 +1,15 @@
-import { createElement } from '../../render';
+import AbstractView from '../../framework/view/abstract-view';
 
 import { createPointEditTemplate } from './point-edit.tpl';
 
-export default class PointEditView {
+export default class PointEditView extends AbstractView {
   #destinations = [];
-  #element = null;
   #offers = [];
   #point;
 
   constructor (point, destinations, offers) {
+    super();
+
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
@@ -16,17 +17,5 @@ export default class PointEditView {
 
   get template() {
     return createPointEditTemplate(this.#point, this.#destinations, this.#offers);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

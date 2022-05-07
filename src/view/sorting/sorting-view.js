@@ -1,23 +1,9 @@
-import { createElement } from '../../render';
+import AbstractView from '../../framework/view/abstract-view';
 
 import { createSortingTemplate } from './sorting.tpl';
 
-export default class SortingView {
-  #element = null;
-
+export default class SortingView extends AbstractView {
   get template() {
     return createSortingTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

@@ -1,14 +1,15 @@
-import { createElement } from '../../render';
+import AbstractView from '../../framework/view/abstract-view';
 
 import { createRouteTemplate } from './route.tpl';
 
-export default class RouteView {
+export default class RouteView extends AbstractView {
   #destinations = [];
-  #element = null;
   #startDate;
   #endDate;
 
   constructor(destinations, startDate, endDate) {
+    super();
+
     this.#destinations = destinations;
     this.#startDate = startDate;
     this.#endDate = endDate;
@@ -16,17 +17,5 @@ export default class RouteView {
 
   get template() {
     return createRouteTemplate(this.#destinations, this.#startDate, this.#endDate);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
