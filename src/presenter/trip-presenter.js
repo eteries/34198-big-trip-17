@@ -38,10 +38,6 @@ export default class TripPresenter {
     const pointComponent = new PointView(point);
     const pointEditComponent = new PointEditView(point, this.#destinations, this.#offers);
 
-    const openButton = pointComponent.element.querySelector('.event__rollup-btn');
-    const closeButton = pointEditComponent.element.querySelector('.event__rollup-btn');
-    const editForm = pointEditComponent.element.querySelector('.event--edit');
-
     const openEditor = () => {
       pointComponent.element.replaceWith(pointEditComponent.element);
     };
@@ -54,20 +50,20 @@ export default class TripPresenter {
       if (isEscapeKey(evt)) {
         closeEditor();
       }
+      document.removeEventListener('keydown', onEscKeyDown);
     };
 
-    openButton.addEventListener('click', () => {
+    pointComponent.setOpenClickHandler(() => {
       openEditor();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    closeButton.addEventListener('click', () => {
+    pointEditComponent.setCloseClickHandler(() => {
       closeEditor();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    editForm.addEventListener('submit', (evt) => {
-      evt.preventDefault();
+    pointEditComponent.setSubmitHandler(() => {
       closeEditor();
       document.removeEventListener('keydown', onEscKeyDown);
     });

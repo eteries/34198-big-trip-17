@@ -1,23 +1,9 @@
-import { createElement } from '../../render';
+import AbstractView from '../../framework/view/abstract-view';
 
 import { createPointsTemplate } from './points.tpl';
 
-export default class PointsView {
-  #element = null;
-
+export default class PointsView extends AbstractView {
   get template() {
     return createPointsTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
