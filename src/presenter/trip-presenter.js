@@ -1,4 +1,4 @@
-import { render } from '../render';
+import { render } from '../framework/render';
 import PointsView from '../view/points/points-view';
 import PointEditView from '../view/point-edit/point-edit-view';
 import PointView from '../view/point/point-view';
