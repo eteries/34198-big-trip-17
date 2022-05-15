@@ -1,3 +1,4 @@
+import { Mode } from '../constants';
 import { render } from '../framework/render';
 import { isEscapeKey } from '../utils/dom';
 import PointView from '../view/point/point-view';
@@ -13,11 +14,15 @@ export default class PointPresenter {
   #offers;
 
   #onUpdate;
+  #onOpen;
 
-  constructor(container, onUpdate) {
+  #mode = Mode.Closed;
+
+  constructor(container, onUpdate, onOpen) {
     this.#container = container;
 
     this.#onUpdate = onUpdate;
+    this.#onOpen = onOpen;
   }
 
   init(point, destinations, offers) {
@@ -38,19 +43,38 @@ export default class PointPresenter {
       return;
     }
 
-    prevPointComponent.element.replaceWith(this.#pointComponent.element);
-    prevPointEditComponent.element.replaceWith(this.#pointEditComponent.element);
+    if (this.#mode === Mode.Closed) {
+      prevPointComponent.element.replaceWith(this.#pointComponent.element);
+    }
+
+    if (this.#mode === Mode.Open) {
+      prevPointEditComponent.element.replaceWith(this.#pointEditComponent.element);
+    }
 
     prevPointComponent.removeElement();
     prevPointEditComponent.removeElement();
   }
 
+  reset() {
+    if (this.#mode !== Mode.Closed) {
+      this.#closeEditor();
+    }
+  }
+
+  destroy() {
+    this.#pointComponent.removeElement();
+    this.#pointEditComponent.removeElement();
+  }
+
   #openEditor() {
     this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);
+    this.#onOpen();
+    this.#mode = Mode.Open;
   }
 
   #closeEditor() {
     this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
+    this.#mode = Mode.Closed;
   }
 
   #renderPoint() {
@@ -60,7 +84,7 @@ export default class PointPresenter {
   #toggleFavorites() {
     this.#onUpdate({
       ...this.#point,
-      isFavorite: !this.#point.isFavorite
+      isFavorite: !this.#point.isFavorite,
     });
   }
 

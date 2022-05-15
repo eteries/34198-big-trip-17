@@ -39,13 +39,22 @@ export default class TripPresenter {
   }
 
   #renderPoint(point) {
-    const pointPresenter = new PointPresenter(this.#pointsComponent.element, this.#updatePoints);
+    const pointPresenter = new PointPresenter(this.#pointsComponent.element, this.#updatePoints, this.#resetPointsList);
     pointPresenter.init(point, this.#destinations, this.#offers);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
+  #clearPointsList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
+  #resetPointsList = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.reset());
+  };
+
   #updatePoints = (updatedPoint) => {
     updateItem(updatedPoint, this.#points);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#destinations, this.#offers);
   };
 }
