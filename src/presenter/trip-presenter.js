@@ -3,6 +3,7 @@ import PointsView from '../view/points/points-view';
 import SortingView from '../view/sorting/sorting-view';
 
 import PointPresenter from './point-presenter';
+import { updateItem } from '../utils/update';
 
 export default class TripPresenter {
   #tripContainer;
@@ -16,6 +17,8 @@ export default class TripPresenter {
   #destinations;
   #offers;
 
+  #pointPresenters;
+
   init(tripContainer, tripModel, destinationsModel, offersModel) {
     this.#tripContainer = tripContainer;
 
@@ -27,6 +30,8 @@ export default class TripPresenter {
     this.#destinations = [...this.#destinationsModel.destinations];
     this.#offers = [...this.#offersModel.offers];
 
+    this.#pointPresenters = new Map();
+
     render(new SortingView(), this.#tripContainer);
     render(this.#pointsComponent, this.#tripContainer);
 
@@ -34,6 +39,13 @@ export default class TripPresenter {
   }
 
   #renderPoint(point) {
-    new PointPresenter(this.#pointsComponent.element).init(point, this.#destinations, this.#offers);
+    const pointPresenter = new PointPresenter(this.#pointsComponent.element, this.#updatePoints);
+    pointPresenter.init(point, this.#destinations, this.#offers);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
+
+  #updatePoints = (updatedPoint) => {
+    updateItem(updatedPoint, this.#points);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
 }
