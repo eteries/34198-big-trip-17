@@ -1,6 +1,5 @@
 import { POINT_TYPES } from '../../constants.js';
 import { formatDate, getToday } from '../../utils/date';
-import { getOffersByType } from '../../utils/filter';
 
 const createPointTypeTemplate = (type, currentType) => {
   const checked = type === currentType ? 'checked' : '';
@@ -20,7 +19,7 @@ const createPointTypesTemplate = (types, currentType) => (
 
 const createOfferTemplate = (currentOffer, selectedOffers) => {
   const {id, title, price} = currentOffer;
-  const isAlreadySelected = selectedOffers.find((selected) => title === selected.title);
+  const isAlreadySelected = selectedOffers.find((selected) => id === selected);
 
   return (
     `<div class="event__offer-selector">
@@ -87,7 +86,7 @@ const createDestinationsTemplate = (destination) => {
   );
 };
 
-export const createPointEditTemplate = (point = {}, destinations = [], offers = []) => {
+export const createPointEditTemplate = (point = {}, destinations = [], availableOffers = []) => {
   const {
     type = POINT_TYPES[0],
     dateFrom = getToday(),
@@ -98,7 +97,6 @@ export const createPointEditTemplate = (point = {}, destinations = [], offers = 
   } = point;
 
   const typesTemplate = createPointTypesTemplate(POINT_TYPES, type);
-  const availableOffers = getOffersByType(offers, type);
   const offersTemplate = createOffersTemplate(availableOffers, selectedOffers);
 
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);

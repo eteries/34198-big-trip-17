@@ -4,15 +4,17 @@ import { createPointTemplate } from './point.tpl';
 
 export default class PointView extends AbstractView {
   #point;
+  #offers;
 
-  constructor(point) {
+  constructor(point, offers) {
     super();
 
     this.#point = point;
+    this.#offers = offers;
   }
 
   get template() {
-    return createPointTemplate(this.#point);
+    return createPointTemplate(this.#point, this.#offers);
   }
 
   setOpenClickHandler(cb) {

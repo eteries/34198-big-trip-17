@@ -1,5 +1,12 @@
-const calculateCost = (points) => points.reduce((cost, current) => {
-  const offersSum = current.offers.reduce((sum, {price}) => sum + price, 0);
+import { getOfferById, getOffersByType } from './filter';
+
+const calculateCost = (points, offers) => points.reduce((cost, current) => {
+  const offersSum = current.offers.reduce((sum, id) => {
+    const offer = getOfferById(getOffersByType(offers, current.type), id);
+    return offer !== undefined
+      ? offer.price
+      : 0;
+  }, 0);
   return cost + current.basePrice + offersSum;
 }, 0);
 

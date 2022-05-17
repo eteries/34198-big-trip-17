@@ -1,5 +1,6 @@
 import { formatDate, formatPointDuration, getDuration } from '../../utils/date';
 import { POINT_TYPES } from '../../constants';
+import { getOfferById } from '../../utils/filter';
 
 const createOfferItemTemplate = ({title, price}) => (
   `<li class="event__offer">
@@ -9,13 +10,15 @@ const createOfferItemTemplate = ({title, price}) => (
   </li>`
 );
 
-const offersTemplate = (offers) => (
-  offers
+const offersTemplate = (selectedOffers, availableOffers) => (
+  selectedOffers
+    .map((id) => getOfferById(availableOffers, id))
+    .filter((offer) => offer !== undefined)
     .map((offer) => createOfferItemTemplate(offer))
     .join('')
 );
 
-export const createPointTemplate = (point) => {
+export const createPointTemplate = (point, availableOffers) => {
   const {
     dateFrom,
     dateTo,
@@ -61,7 +64,7 @@ export const createPointTemplate = (point) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${offersTemplate(offers)}
+          ${offersTemplate(offers, availableOffers)}
         </ul>
         <button class="event__favorite-btn ${favoriteClass}" type="button">
           <span class="visually-hidden">Add to favorite</span>
