@@ -1,8 +1,9 @@
-import { Mock } from '../mock';
-import { generatePoint } from '../mock/point';
-
 export default class TripModel {
-  #points = Array.from({length: Mock.POINTS_NUM}, generatePoint);
+  #points;
+
+  constructor(points) {
+    this.#points = points;
+  }
 
   get points() {
     return this.#points;

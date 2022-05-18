@@ -1,8 +1,9 @@
-import { Mock } from '../mock';
-import { generateDestination } from '../mock/destination';
-
 export default class DestinationsModel {
-  #destinations = Mock.CITIES.map(generateDestination);
+  #destinations;
+
+  constructor(destinations) {
+    this.#destinations = destinations;
+  }
 
   get destinations() {
     return this.#destinations;

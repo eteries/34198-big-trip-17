@@ -4,6 +4,11 @@ export const Filter = {
   Past: 'past',
 };
 
+export const Mode = {
+  Closed: 'Closed',
+  Open: 'Open',
+};
+
 export const POINT_TYPES = [
   'Taxi',
   'Bus',

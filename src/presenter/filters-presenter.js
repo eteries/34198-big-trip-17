@@ -1,4 +1,4 @@
-import { render } from '../render';
+import { render } from '../framework/render';
 import FiltersView from '../view/filters/filters-view';
 
 export default class FiltersPresenter {
