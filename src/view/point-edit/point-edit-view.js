@@ -2,6 +2,7 @@ import AbstractStatefulView from '../../framework/view/abstract-stateful-view';
 
 import { createPointEditTemplate } from './point-edit.tpl';
 import { mapPointToState, mapStateToPoint } from '../../utils/point';
+import { addItem, removeItem } from '../../utils/update';
 
 export default class PointEditView extends AbstractStatefulView {
   #destinations = [];
@@ -36,6 +37,7 @@ export default class PointEditView extends AbstractStatefulView {
   #setInnerHandlers() {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#onTypeChange);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationChange);
+    this.element.querySelector('.event__details').addEventListener('change', this.#onOffersChange);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceChange);
   }
 
@@ -66,6 +68,17 @@ export default class PointEditView extends AbstractStatefulView {
 
     this.updateElement({
       basePrice,
+    });
+  };
+
+  #onOffersChange = ({target: checkbox}) => {
+    const id = Number(checkbox.value);
+    const offers = checkbox.checked
+      ? addItem(id, this._state.offers)
+      : removeItem(id, this._state.offers);
+
+    this.updateElement({
+      offers
     });
   };
 
