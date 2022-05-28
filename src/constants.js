@@ -4,6 +4,11 @@ export const Filter = {
   Past: 'past',
 };
 
+export const IDRange = {
+  MIN: 1,
+  MAX: 9999,
+};
+
 export const Mode = {
   Closed: 'Closed',
   Open: 'Open',

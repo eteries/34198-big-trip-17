@@ -1,8 +1,12 @@
-import { POINT_TYPES } from '../constants';
+import { IDRange, POINT_TYPES } from '../constants';
 import { formatDate, getToday } from './date';
+import { getUniqueRandomInt } from './random';
 
 const mapPointToState = (point) => {
   const state = {
+    ...point,
+    id: point.id ?? getUniqueRandomInt(IDRange.MIN, IDRange.MAX)(),
+    isFavorite: point.isFavorite ?? false,
     type: point.type ?? POINT_TYPES[0],
     dateFrom: point.dateFrom ?? getToday(),
     dateTo: point.dateTo ?? getToday(),
@@ -17,4 +21,13 @@ const mapPointToState = (point) => {
   return state;
 };
 
-export { mapPointToState };
+const mapStateToPoint = (state) => {
+  const point = {...state};
+
+  delete point.dateFromValue;
+  delete point.dateToValue;
+
+  return point;
+};
+
+export { mapPointToState, mapStateToPoint };
