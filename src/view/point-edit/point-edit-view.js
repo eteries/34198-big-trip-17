@@ -1,4 +1,8 @@
+import 'flatpickr/dist/flatpickr.min.css';
+
 import AbstractStatefulView from '../../framework/view/abstract-stateful-view';
+import { getUnixNum, setDateTimePicker } from '../../utils/date';
+import { highlightElement } from '../../utils/dom';
 import { getOffersByType } from '../../utils/filter';
 import { mapPointToState, mapStateToPoint } from '../../utils/point';
 import { addItem, removeItem } from '../../utils/update';
@@ -8,6 +12,7 @@ import { createPointEditTemplate } from './point-edit.tpl';
 export default class PointEditView extends AbstractStatefulView {
   #destinations = [];
   #offers = [];
+  #datepickers = {};
 
   constructor(point, destinations, offers) {
     super();
@@ -35,8 +40,32 @@ export default class PointEditView extends AbstractStatefulView {
     editForm.addEventListener('submit', this.#onSubmit);
   }
 
+  setDatepickers() {
+    this.#datepickers.dateFrom = setDateTimePicker({
+      element: this.element.querySelector('#event-start-time-1'),
+      defaultDate: this._state.dateFrom,
+      onChange: this.#onDateFromChange,
+    });
+
+    this.#datepickers.dateTo = setDateTimePicker({
+      element: this.element.querySelector('#event-end-time-1'),
+      defaultDate: this._state.dateTo,
+      onChange: this.#onDateToChange,
+    });
+  }
+
   #getAvailableOffers() {
     return getOffersByType(this.#offers, this._state.type);
+  }
+
+  #validateDate() {
+    const dateTo = this.element.querySelector('.event__field-group--time');
+    const isValid = getUnixNum(this._state.dateFrom) <= getUnixNum(this._state.dateTo);
+
+    return {
+      isValid,
+      element: dateTo
+    };
   }
 
   #setInnerHandlers() {
@@ -89,12 +118,40 @@ export default class PointEditView extends AbstractStatefulView {
 
   #onSubmit = (evt) => {
     evt.preventDefault();
+
+    const {element, isValid} = this.#validateDate();
+    highlightElement(element, isValid);
+    if (isValid === false) {
+      return;
+    }
+
     this._callback.onSubmit(mapStateToPoint(this._state));
+  };
+
+  #onDateFromChange = ([dateFrom]) => {
+    this.updateElement({
+      dateFrom,
+    });
+  };
+
+  #onDateToChange = ([dateTo]) => {
+    this.updateElement({
+      dateTo,
+    });
   };
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setCloseClickHandler(this._callback.onCloseClick);
     this.setSubmitHandler(this._callback.onSubmit);
+    this.setDatepickers();
+  };
+
+  removeElement = () => {
+    super.removeElement();
+
+    this.#datepickers?.dateFrom.destroy();
+    this.#datepickers?.dateTo.destroy();
+    this.#datepickers = {};
   };
 }

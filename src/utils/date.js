@@ -1,9 +1,12 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import flatpickr from 'flatpickr';
 
 dayjs.extend(duration);
 
 const getDuration = (dateFrom, dateTo) => dayjs(dateTo).diff(dateFrom);
+
+const getUnixNum = (date) => dayjs(date).unix();
 
 const formatDate = (date, format) => dayjs(date).format(format);
 
@@ -43,18 +46,26 @@ const formatTripDuration = (dateFrom , dateTo) => {
   return Format.Days;
 };
 
-const addTimeInterval = (date, interval, unit) => dayjs(date).add(interval, unit).toISOString();
-
-const subtractTimeInterval = (date, interval, unit) => dayjs(date).subtract(interval, unit).toISOString();
-
 const getToday = () => dayjs().startOf('date').toISOString();
 
+const setDateTimePicker = ({element, defaultDate, onChange}) => (
+  flatpickr(
+    element,
+    {
+      enableTime: true,
+      dateFormat: 'd/m/Y H:i',
+      defaultDate,
+      onChange
+    }
+  )
+);
+
 export {
-  addTimeInterval,
   getDuration,
   getToday,
+  getUnixNum,
   formatDate,
   formatPointDuration,
   formatTripDuration,
-  subtractTimeInterval
+  setDateTimePicker
 };
