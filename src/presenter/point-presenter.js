@@ -3,7 +3,6 @@ import { render } from '../framework/render';
 import { isEscapeKey } from '../utils/dom';
 import PointView from '../view/point/point-view';
 import PointEditView from '../view/point-edit/point-edit-view';
-import { getOffersByType } from '../utils/filter';
 
 export default class PointPresenter {
   #container;
@@ -29,7 +28,7 @@ export default class PointPresenter {
   init(point, destinations, offers) {
     this.#point = point;
     this.#destinations = destinations;
-    this.#offers = getOffersByType(offers, this.#point.type);
+    this.#offers = offers;
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;

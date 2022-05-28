@@ -1,8 +1,9 @@
 import AbstractStatefulView from '../../framework/view/abstract-stateful-view';
-
-import { createPointEditTemplate } from './point-edit.tpl';
+import { getOffersByType } from '../../utils/filter';
 import { mapPointToState, mapStateToPoint } from '../../utils/point';
 import { addItem, removeItem } from '../../utils/update';
+
+import { createPointEditTemplate } from './point-edit.tpl';
 
 export default class PointEditView extends AbstractStatefulView {
   #destinations = [];
@@ -19,7 +20,7 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   get template() {
-    return createPointEditTemplate(this._state, this.#destinations, this.#offers);
+    return createPointEditTemplate(this._state, this.#destinations, this.#getAvailableOffers());
   }
 
   setCloseClickHandler(cb) {
@@ -34,6 +35,10 @@ export default class PointEditView extends AbstractStatefulView {
     editForm.addEventListener('submit', this.#onSubmit);
   }
 
+  #getAvailableOffers() {
+    return getOffersByType(this.#offers, this._state.type);
+  }
+
   #setInnerHandlers() {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#onTypeChange);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationChange);
@@ -41,9 +46,9 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceChange);
   }
 
-  #onTypeChange = (evt) => {
+  #onTypeChange = ({target}) => {
     this.updateElement({
-      type: evt.target.value,
+      type: target.value,
     });
   };
 
