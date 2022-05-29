@@ -54,6 +54,12 @@ export default class PointEditView extends AbstractStatefulView {
     });
   }
 
+  removeDatepickers() {
+    this.#datepickers?.dateFrom?.destroy();
+    this.#datepickers?.dateTo?.destroy();
+    this.#datepickers = {};
+  }
+
   #getAvailableOffers() {
     return getOffersByType(this.#offers, this._state.type);
   }
@@ -150,8 +156,6 @@ export default class PointEditView extends AbstractStatefulView {
   removeElement = () => {
     super.removeElement();
 
-    this.#datepickers?.dateFrom?.destroy();
-    this.#datepickers?.dateTo?.destroy();
-    this.#datepickers = {};
+    this.removeDatepickers();
   };
 }

@@ -75,7 +75,9 @@ export default class PointPresenter {
 
   #closeEditor() {
     this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
+    document.removeEventListener('keydown', this.#onEscKeyDown);
     this.#mode = Mode.Closed;
+    this.#pointEditComponent.removeDatepickers();
   }
 
   #renderPoint() {
@@ -97,12 +99,10 @@ export default class PointPresenter {
 
     this.#pointEditComponent.setCloseClickHandler(() => {
       this.#closeEditor();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
     });
 
     this.#pointEditComponent.setSubmitHandler((update) => {
       this.#closeEditor();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
       this.#onUpdate((update));
     });
 
