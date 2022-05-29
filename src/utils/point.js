@@ -1,5 +1,5 @@
 import { IDRange, POINT_TYPES } from '../constants';
-import { formatDate, getToday } from './date';
+import { formatDate, getDifference, getDuration, getToday } from './date';
 import { getUniqueRandomInt } from './random';
 
 const mapPointToState = (point) => {
@@ -30,4 +30,10 @@ const mapStateToPoint = (state) => {
   return point;
 };
 
-export { mapPointToState, mapStateToPoint };
+const sortByStartDate = (pointA, pointB) => getDifference(pointA.dateFrom, pointB.dateFrom);
+
+const sortByDuration = (pointA, pointB) => getDuration(pointA.dateFrom, pointA.dateTo) - getDuration(pointB.dateFrom, pointB.dateTo);
+
+const sortByPrice = (pointA, pointB) => pointA.basePrice - pointB.basePrice;
+
+export { mapPointToState, mapStateToPoint, sortByStartDate, sortByDuration, sortByPrice };

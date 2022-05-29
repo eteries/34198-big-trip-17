@@ -1,7 +1,7 @@
 export const Filter = {
-  Everything: 'everything',
-  Future: 'future',
-  Past: 'past',
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
 };
 
 export const IDRange = {
@@ -25,3 +25,11 @@ export const POINT_TYPES = [
   'Sightseeing',
   'Restaurant',
 ];
+
+export const SortType = {
+  START_DATE: 'day',
+  EVENT: 'event',
+  DURATION: 'time',
+  PRICE: 'price',
+  OFFERS: 'offer'
+};

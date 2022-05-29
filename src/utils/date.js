@@ -46,6 +46,8 @@ const formatTripDuration = (dateFrom , dateTo) => {
   return Format.Days;
 };
 
+const getDifference = (firstDate, secondDate) => dayjs(firstDate).diff(secondDate);
+
 const getToday = () => dayjs().startOf('date').toISOString();
 
 const setDateTimePicker = ({element, defaultDate, onChange}) => (
@@ -62,6 +64,7 @@ const setDateTimePicker = ({element, defaultDate, onChange}) => (
 
 export {
   getDuration,
+  getDifference,
   getToday,
   getUnixNum,
   formatDate,

@@ -1,5 +1,5 @@
 import { Mode } from '../constants';
-import { render } from '../framework/render';
+import { remove, render } from '../framework/render';
 import { isEscapeKey } from '../utils/dom';
 import PointView from '../view/point/point-view';
 import PointEditView from '../view/point-edit/point-edit-view';
@@ -62,8 +62,8 @@ export default class PointPresenter {
   }
 
   destroy() {
-    this.#pointComponent.removeElement();
-    this.#pointEditComponent.removeElement();
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
   }
 
   #openEditor() {

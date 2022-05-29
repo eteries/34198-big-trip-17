@@ -150,8 +150,8 @@ export default class PointEditView extends AbstractStatefulView {
   removeElement = () => {
     super.removeElement();
 
-    this.#datepickers?.dateFrom.destroy();
-    this.#datepickers?.dateTo.destroy();
+    this.#datepickers?.dateFrom?.destroy();
+    this.#datepickers?.dateTo?.destroy();
     this.#datepickers = {};
   };
 }
