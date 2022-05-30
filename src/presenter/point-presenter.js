@@ -1,9 +1,8 @@
 import { Mode } from '../constants';
-import { render } from '../framework/render';
+import { remove, render } from '../framework/render';
 import { isEscapeKey } from '../utils/dom';
 import PointView from '../view/point/point-view';
 import PointEditView from '../view/point-edit/point-edit-view';
-import { getOffersByType } from '../utils/filter';
 
 export default class PointPresenter {
   #container;
@@ -29,7 +28,7 @@ export default class PointPresenter {
   init(point, destinations, offers) {
     this.#point = point;
     this.#destinations = destinations;
-    this.#offers = getOffersByType(offers, this.#point.type);
+    this.#offers = offers;
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
@@ -63,19 +62,22 @@ export default class PointPresenter {
   }
 
   destroy() {
-    this.#pointComponent.removeElement();
-    this.#pointEditComponent.removeElement();
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
   }
 
   #openEditor() {
     this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);
     this.#onOpen();
+    this.#pointEditComponent.setDatepickers();
     this.#mode = Mode.Open;
   }
 
   #closeEditor() {
     this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
+    document.removeEventListener('keydown', this.#onEscKeyDown);
     this.#mode = Mode.Closed;
+    this.#pointEditComponent.removeDatepickers();
   }
 
   #renderPoint() {
@@ -97,12 +99,11 @@ export default class PointPresenter {
 
     this.#pointEditComponent.setCloseClickHandler(() => {
       this.#closeEditor();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
     });
 
-    this.#pointEditComponent.setSubmitHandler(() => {
+    this.#pointEditComponent.setSubmitHandler((update) => {
       this.#closeEditor();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
+      this.#onUpdate((update));
     });
 
     this.#pointComponent.setFavoriteClickHandler(() => {

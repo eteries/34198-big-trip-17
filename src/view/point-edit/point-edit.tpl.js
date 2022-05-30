@@ -1,5 +1,4 @@
 import { POINT_TYPES } from '../../constants.js';
-import { formatDate, getToday } from '../../utils/date';
 
 const createPointTypeTemplate = (type, currentType) => {
   const checked = type === currentType ? 'checked' : '';
@@ -86,24 +85,14 @@ const createDestinationsTemplate = (destination) => {
   );
 };
 
-export const createPointEditTemplate = (point = {}, destinations = [], availableOffers = []) => {
-  const {
-    type = POINT_TYPES[0],
-    dateFrom = getToday(),
-    dateTo = getToday(),
-    basePrice = 0,
-    offers: selectedOffers = [],
-    destination,
-  } = point;
+export const createPointEditTemplate = (point, destinations = [], availableOffers = []) => {
+  const {type, dateFromValue, dateToValue, basePrice, offers: selectedOffers, destination = destinations[0]} = point;
 
   const typesTemplate = createPointTypesTemplate(POINT_TYPES, type);
   const offersTemplate = createOffersTemplate(availableOffers, selectedOffers);
 
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);
   const destinationsTemplate = createDestinationsTemplate(destination);
-
-  const dateFromValue = formatDate(dateFrom, 'DD/MM/YY HH:mm');
-  const dateToValue = formatDate(dateTo, 'DD/MM/YY HH:mm');
 
   return (
     `<li class="trip-events__item">
@@ -128,7 +117,7 @@ export const createPointEditTemplate = (point = {}, destinations = [], available
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Chamonix" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${destinationOptionsTemplate}
             </datalist>

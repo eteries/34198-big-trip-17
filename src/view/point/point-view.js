@@ -1,4 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view';
+import { getOffersByType } from '../../utils/filter';
 
 import { createPointTemplate } from './point.tpl';
 
@@ -10,7 +11,7 @@ export default class PointView extends AbstractView {
     super();
 
     this.#point = point;
-    this.#offers = offers;
+    this.#offers = getOffersByType(offers, this.#point.type);
   }
 
   get template() {
