@@ -1,4 +1,4 @@
-import { Mode } from '../constants';
+import { Mode, UpdateType, UserAction } from '../constants';
 import { remove, render } from '../framework/render';
 import { isEscapeKey } from '../utils/dom';
 import PointView from '../view/point/point-view';
@@ -85,10 +85,13 @@ export default class PointPresenter {
   }
 
   #toggleFavorites() {
-    this.#onUpdate({
-      ...this.#point,
-      isFavorite: !this.#point.isFavorite,
-    });
+    this.#onUpdate(
+      UserAction.UPDATE_POINT,
+      UpdateType.POINT,
+      {
+        ...this.#point,
+        isFavorite: !this.#point.isFavorite,
+      });
   }
 
   #setHandlers() {
@@ -103,11 +106,25 @@ export default class PointPresenter {
 
     this.#pointEditComponent.setSubmitHandler((update) => {
       this.#closeEditor();
-      this.#onUpdate((update));
+      this.#onUpdate(
+        UserAction.UPDATE_POINT,
+        UpdateType.TRIP,
+        update
+      );
     });
 
     this.#pointComponent.setFavoriteClickHandler(() => {
       this.#toggleFavorites();
+    });
+
+    this.#pointEditComponent.setDeleteHandler((deletedPoint) => {
+      this.#closeEditor();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+      this.#onUpdate(
+        UserAction.DELETE_POINT,
+        UpdateType.TRIP,
+        deletedPoint,
+      );
     });
   }
 

@@ -40,6 +40,12 @@ export default class PointEditView extends AbstractStatefulView {
     editForm.addEventListener('submit', this.#onSubmit);
   }
 
+  setDeleteHandler(cb) {
+    this._callback.onDelete = cb;
+    const editForm = this.element.querySelector('.event--edit');
+    editForm.addEventListener('reset', this.#onDelete);
+  }
+
   setDatepickers() {
     this.#datepickers.dateFrom = setDateTimePicker({
       element: this.element.querySelector('#event-start-time-1'),
@@ -134,6 +140,11 @@ export default class PointEditView extends AbstractStatefulView {
     this._callback.onSubmit(mapStateToPoint(this._state));
   };
 
+  #onDelete = (evt) => {
+    evt.preventDefault();
+    this._callback.onDelete(mapStateToPoint(this._state));
+  };
+
   #onDateFromChange = ([dateFrom]) => {
     this.updateElement({
       dateFrom,
@@ -150,6 +161,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.#setInnerHandlers();
     this.setCloseClickHandler(this._callback.onCloseClick);
     this.setSubmitHandler(this._callback.onSubmit);
+    this.setDeleteHandler(this._callback.onDelete);
     this.setDatepickers();
   };
 
