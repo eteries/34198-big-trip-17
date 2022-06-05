@@ -6,13 +6,15 @@ import { calculateCost, calculateTripEnd, calculateTripStart } from '../utils/ca
 import { getUniqueDestinations } from '../utils/filter';
 
 export default class HeaderPresenter {
-  init(headerContainer, infoContainer, tripModel, offersModel) {
+  constructor(headerContainer, infoContainer, tripModel, offersModel) {
     this.headerContainer = headerContainer;
     this.infoContainer = infoContainer;
 
     this.tripModel = tripModel;
     this.offersModel = offersModel;
+  }
 
+  init() {
     this.points = [...this.tripModel.points];
     this.offers = [...this.offersModel.offers];
 

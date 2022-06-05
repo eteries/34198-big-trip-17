@@ -1,5 +1,5 @@
-import { IDRange, POINT_TYPES } from '../constants';
-import { formatDate, getDifference, getDuration, getToday } from './date';
+import { Filter as Filters, IDRange, POINT_TYPES, SortType } from '../constants';
+import { formatDate, getDifference, getDuration, getToday, getUnixNum } from './date';
 import { getUniqueRandomInt } from './random';
 
 const mapPointToState = (point) => {
@@ -30,10 +30,33 @@ const mapStateToPoint = (state) => {
   return point;
 };
 
-const sortByStartDate = (pointA, pointB) => getDifference(pointA.dateFrom, pointB.dateFrom);
+const sortPoints = (points, sortType) => {
+  switch (sortType) {
+    case SortType.START_DATE:
+      return [...points].sort((pointA, pointB) => getDifference(pointA.dateFrom, pointB.dateFrom));
 
-const sortByDuration = (pointA, pointB) => getDuration(pointA.dateFrom, pointA.dateTo) - getDuration(pointB.dateFrom, pointB.dateTo);
+    case SortType.DURATION:
+      return [...points].sort((pointA, pointB) => getDuration(pointA.dateFrom, pointA.dateTo) - getDuration(pointB.dateFrom, pointB.dateTo));
 
-const sortByPrice = (pointA, pointB) => pointA.basePrice - pointB.basePrice;
+    case SortType.PRICE:
+      return [...points].sort((pointA, pointB) => pointA.basePrice - pointB.basePrice);
 
-export { mapPointToState, mapStateToPoint, sortByStartDate, sortByDuration, sortByPrice };
+    default:
+      return points;
+  }
+};
+
+const filterPoints = (points, filterType) => {
+  switch (filterType) {
+    case Filters.FUTURE:
+      return [...points].filter((point) => getUnixNum(point.dateFrom) > getUnixNum(new Date()));
+
+    case Filters.PAST:
+      return [...points].filter((point) => getUnixNum(point.dateFrom) < getUnixNum(new Date()));
+
+    default:
+      return points;
+  }
+};
+
+export { mapPointToState, mapStateToPoint, filterPoints, sortPoints };

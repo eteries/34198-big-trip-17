@@ -17,10 +17,10 @@ const destinationsModel = new DestinationsModel(destinations);
 const offersModel = new OffersModel(offers);
 const filtersModel = new FiltersModel();
 
-const headerPresenter = new HeaderPresenter();
-const filtersPresenter = new FiltersPresenter();
-const tripPresenter = new TripPresenter(eventsElement, tripModel, destinationsModel, offersModel);
+const headerPresenter = new HeaderPresenter(mainElement, tripInfoElement, tripModel, offersModel);
+const filtersPresenter = new FiltersPresenter(filtersElement, filtersModel, tripModel);
+const tripPresenter = new TripPresenter(eventsElement, tripModel, destinationsModel, offersModel, filtersModel);
 
-headerPresenter.init(mainElement, tripInfoElement, tripModel, offersModel);
-filtersPresenter.init(filtersElement, filtersModel);
+headerPresenter.init();
+filtersPresenter.init();
 tripPresenter.init();
