@@ -1,6 +1,6 @@
 import { formatDate, formatPointDuration, getDuration } from '../../utils/date';
 import { POINT_TYPES } from '../../constants';
-import { getOfferById } from '../../utils/filter';
+import { getOfferById } from '../../utils/offers';
 
 const createOfferItemTemplate = ({title, price}) => (
   `<li class="event__offer">

@@ -5,11 +5,13 @@ import SortingView from '../view/sorting/sorting-view';
 import { filterPoints, sortPoints } from '../utils/point';
 
 import PointPresenter from './point-presenter';
+import EmptyView from '../view/empty/empty-view';
 
 export default class TripPresenter {
   #tripContainer;
   #pointsComponent;
   #sortingComponent;
+  #emptyComponent;
 
   #destinationsModel;
   #offersModel;
@@ -48,6 +50,7 @@ export default class TripPresenter {
 
     this.#pointsComponent = new PointsView();
     this.#sortingComponent = new SortingView(SortType, this.#currentSort);
+    this.#emptyComponent = new EmptyView(this.#currentFilter);
 
     this.#renderTrip();
   }
@@ -62,8 +65,21 @@ export default class TripPresenter {
   }
 
   #renderTrip() {
+    if (this.points.length === 0) {
+      this.#renderEmptyTrip();
+      return;
+    }
+
     this.#renderSort();
     this.#renderPointsList();
+  }
+
+  #reRenderTrip() {
+    remove(this.#sortingComponent);
+    remove(this.#emptyComponent);
+    this.#clearPointsList();
+
+    this.#renderTrip();
   }
 
   #renderPointsList() {
@@ -74,6 +90,10 @@ export default class TripPresenter {
   #reRenderPointsList() {
     this.#clearPointsList();
     this.#renderPointsList();
+  }
+
+  #renderEmptyTrip() {
+    render(this.#emptyComponent, this.#tripContainer);
   }
 
   #renderPoint(point) {
@@ -89,11 +109,6 @@ export default class TripPresenter {
   #renderSort() {
     render(this.#sortingComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
     this.#sortingComponent.setSortingChangeHandler(this.#handleSortTypeChange);
-  }
-
-  #reRenderSort() {
-    remove(this.#sortingComponent);
-    this.#renderSort();
   }
 
   #clearPointsList() {
@@ -137,8 +152,7 @@ export default class TripPresenter {
         this.#reRenderPointsList();
         break;
       case UpdateType.TRIP:
-        this.#reRenderPointsList();
-        this.#reRenderSort();
+        this.#reRenderTrip();
         break;
     }
   };

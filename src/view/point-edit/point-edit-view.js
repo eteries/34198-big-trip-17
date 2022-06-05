@@ -3,7 +3,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import AbstractStatefulView from '../../framework/view/abstract-stateful-view';
 import { getUnixNum, setDateTimePicker } from '../../utils/date';
 import { highlightElement } from '../../utils/dom';
-import { getOffersByType } from '../../utils/filter';
+import { getOffersByType } from '../../utils/offers';
 import { mapPointToState, mapStateToPoint } from '../../utils/point';
 import { addItem, removeItem } from '../../utils/update';
 
@@ -82,9 +82,9 @@ export default class PointEditView extends AbstractStatefulView {
 
   #setInnerHandlers() {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#onTypeChange);
-    this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationChange);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#onDestinationChange);
     this.element.querySelector('.event__details').addEventListener('change', this.#onOffersChange);
-    this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceChange);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#onPriceChange);
   }
 
   #onTypeChange = ({target}) => {

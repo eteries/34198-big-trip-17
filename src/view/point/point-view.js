@@ -1,5 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view';
-import { getOffersByType } from '../../utils/filter';
+import { getOffersByType } from '../../utils/offers';
 
 import { createPointTemplate } from './point.tpl';
 

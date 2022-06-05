@@ -4,6 +4,12 @@ export const Filter = {
   PAST: 'past',
 };
 
+export const WelcomeMessage = {
+  NEW: 'Click New Event to create your first point',
+  PAST: 'There are no past events now',
+  FUTURE: 'There are no future events now',
+};
+
 export const IDRange = {
   MIN: 1,
   MAX: 9999,

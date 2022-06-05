@@ -552,8 +552,8 @@ export const points = [
   {
     'id': '13',
     'type': 'bus',
-    'dateFrom': '2022-06-21T14:34:17.719Z',
-    'dateTo': '2022-06-22T09:52:45.252Z',
+    'dateFrom': '2022-05-21T14:34:17.719Z',
+    'dateTo': '2022-05-22T09:52:45.252Z',
     'destination': {
       'name': 'Nagasaki',
       'description': 'Nagasaki, with crowded streets, for those who value comfort and coziness, with an embankment of a mighty river as a centre of attraction, a perfect place to stay with a family.',
@@ -649,8 +649,8 @@ export const points = [
   {
     'id': '15',
     'type': 'train',
-    'dateFrom': '2022-06-22T23:35:36.646Z',
-    'dateTo': '2022-06-23T16:34:59.887Z',
+    'dateFrom': '2022-05-22T23:35:36.646Z',
+    'dateTo': '2022-05-23T16:34:59.887Z',
     'destination': {
       'name': 'Milan',
       'description': 'Milan, is a beautiful city, with crowded streets.',
@@ -731,8 +731,8 @@ export const points = [
   {
     'id': '17',
     'type': 'ship',
-    'dateFrom': '2022-06-24T06:26:17.829Z',
-    'dateTo': '2022-06-24T18:33:48.241Z',
+    'dateFrom': '2022-05-24T06:26:17.829Z',
+    'dateTo': '2022-05-24T18:33:48.241Z',
     'destination': {
       'name': 'Kopenhagen',
       'description': 'Kopenhagen, middle-eastern paradise, with an embankment of a mighty river as a centre of attraction.',
