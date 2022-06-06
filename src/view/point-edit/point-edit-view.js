@@ -112,7 +112,7 @@ export default class PointEditView extends AbstractStatefulView {
       return;
     }
 
-    this.updateElement({
+    this._setState({
       basePrice,
     });
   };
@@ -123,7 +123,7 @@ export default class PointEditView extends AbstractStatefulView {
       ? addItem(id, this._state.offers)
       : removeItem(id, this._state.offers);
 
-    this.updateElement({
+    this._setState({
       offers
     });
   };
@@ -146,13 +146,13 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #onDateFromChange = ([dateFrom]) => {
-    this.updateElement({
+    this._setState({
       dateFrom,
     });
   };
 
   #onDateToChange = ([dateTo]) => {
-    this.updateElement({
+    this._setState({
       dateTo,
     });
   };
