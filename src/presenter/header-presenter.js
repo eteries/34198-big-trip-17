@@ -3,13 +3,13 @@ import RouteView from '../view/route/route-view';
 import CostView from '../view/cost/cost-view';
 import { UpdateType } from '../constants';
 import { calculateCost, calculateTripEnd, calculateTripStart } from '../utils/calculate';
-import { getUniqueDestinations } from '../utils/destinations';
+import { getDestinationsNamesByDate } from '../utils/destinations';
 
 export default class HeaderPresenter {
   #headerContainer;
 
-  #costComponent;
-  #routeComponent;
+  #costComponent = null;
+  #routeComponent = null;
 
   #tripModel;
   #offersModel;
@@ -32,7 +32,7 @@ export default class HeaderPresenter {
   }
 
   get destinations() {
-    return getUniqueDestinations(this.#tripModel.points);
+    return getDestinationsNamesByDate(this.#tripModel.points);
   }
 
   get startDate() {
@@ -44,6 +44,10 @@ export default class HeaderPresenter {
   }
 
   #renderInfo() {
+    if (this.#tripModel.points.length === 0) {
+      return;
+    }
+
     this.#routeComponent = new RouteView(this.destinations, this.startDate, this.endDate);
     this.#costComponent = new CostView(this.cost);
 

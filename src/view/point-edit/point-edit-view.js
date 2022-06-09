@@ -122,14 +122,14 @@ export default class PointEditView extends AbstractStatefulView {
 
   #onPriceChange = ({target}) => {
     this._setState({
-      basePrice: Number(target.value),
+      basePrice: parseInt(target.value, 10),
     });
 
     this.#validatePrice();
   };
 
   #onOffersChange = ({target: checkbox}) => {
-    const id = Number(checkbox.value);
+    const id = parseInt(checkbox.value, 10);
     const offers = checkbox.checked
       ? addItem(id, this._state.offers)
       : removeItem(id, this._state.offers);

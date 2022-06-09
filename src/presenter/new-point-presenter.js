@@ -5,7 +5,7 @@ import PointEditView from '../view/point-edit/point-edit-view';
 
 export default class NewPointPresenter {
   #container;
-  #pointEditComponent;
+  #pointEditComponent = null;
 
   #point;
   #destinations;

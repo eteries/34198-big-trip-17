@@ -12,10 +12,10 @@ import NewPointPresenter from './new-point-presenter';
 export default class TripPresenter {
   #tripContainer;
   #buttonContainer;
-  #pointsComponent;
-  #sortingComponent;
-  #emptyComponent;
-  #newPointButtonComponent;
+  #pointsComponent = null;
+  #sortingComponent = null;
+  #emptyComponent = null;
+  #newPointButtonComponent = null;
 
   #destinationsModel;
   #offersModel;
@@ -68,7 +68,6 @@ export default class TripPresenter {
   #createViews() {
     this.#pointsComponent = new PointsView();
     this.#sortingComponent = new SortingView(SortType, this.#currentSort);
-    this.#emptyComponent = new EmptyView(this.#currentFilter);
 
     this.#renderTrip();
     this.#renderNewPointButton();
@@ -103,6 +102,7 @@ export default class TripPresenter {
   }
 
   #renderEmptyTrip() {
+    this.#emptyComponent = new EmptyView(this.#currentFilter);
     render(this.#emptyComponent, this.#tripContainer);
   }
 

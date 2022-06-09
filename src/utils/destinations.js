@@ -1,3 +1,9 @@
-const getUniqueDestinations = (points) => [...new Set(points.map(({destination = {}}) => destination.name))];
+import { sortPoints } from './point';
+import { SortType } from '../constants';
 
-export { getUniqueDestinations };
+const getDestinationsNamesByDate = (points) => (
+  sortPoints(points, SortType.START_DATE)
+    .map(({destination}) => destination.name)
+);
+
+export { getDestinationsNamesByDate };

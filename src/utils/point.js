@@ -16,7 +16,7 @@ const mapPointToState = (point) => {
   };
 
   state.dateFromValue = formatDate(state.dateFrom, 'DD/MM/YY HH:mm');
-  state.dateToValue= formatDate(state.dateTo, 'DD/MM/YY HH:mm');
+  state.dateToValue = formatDate(state.dateTo, 'DD/MM/YY HH:mm');
 
   return state;
 };
@@ -63,7 +63,7 @@ const filterPoints = (points, filterType) => {
       return [...points].filter((point) => getUnixNum(point.dateFrom) > getUnixNum(new Date()));
 
     case Filters.PAST:
-      return [...points].filter((point) => getUnixNum(point.dateFrom) < getUnixNum(new Date()));
+      return [...points].filter((point) => getUnixNum(point.dateTo) < getUnixNum(new Date()));
 
     default:
       return points;

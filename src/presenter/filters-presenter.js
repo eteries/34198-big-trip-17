@@ -4,7 +4,7 @@ import FiltersView from '../view/filters/filters-view';
 
 export default class FiltersPresenter {
   #container;
-  #filtersComponent;
+  #filtersComponent = null;
   #filtersModel;
   #pointsModel;
 
@@ -12,25 +12,13 @@ export default class FiltersPresenter {
     this.#container = container;
     this.#filtersModel = filtersModel;
     this.#pointsModel = pointsModel;
-  }
-
-  init() {
-    const prevFiltersComponent = this.#filtersComponent;
-
-    this.#filtersComponent = new FiltersView(this.#filtersModel.filters, this.#filtersModel.currentFilter);
-    this.#filtersComponent.setFilterChangeHandler(this.#handleFilterChange);
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filtersModel.addObserver(this.#handleModelEvent);
+  }
 
-
-    if (!prevFiltersComponent) {
-      this.#renderFilters();
-      return;
-    }
-
-    prevFiltersComponent.element.replaceWith(this.#filtersComponent.element);
-    remove(prevFiltersComponent);
+  init() {
+    this.#createOrUpdateView();
   }
 
   destroy() {
@@ -41,6 +29,21 @@ export default class FiltersPresenter {
     this.#filtersModel.removeObserver(this.#handleModelEvent);
 
     this.#filtersModel.setFilter(UpdateType.TRIP, Filter.EVERYTHING);
+  }
+
+  #createOrUpdateView() {
+    const prevFiltersComponent = this.#filtersComponent;
+
+    this.#filtersComponent = new FiltersView(this.#filtersModel.filters, this.#filtersModel.currentFilter);
+    this.#filtersComponent.setFilterChangeHandler(this.#handleFilterChange);
+
+    if (!prevFiltersComponent) {
+      this.#renderFilters();
+      return;
+    }
+
+    prevFiltersComponent.element.replaceWith(this.#filtersComponent.element);
+    remove(prevFiltersComponent);
   }
 
   #renderFilters() {
