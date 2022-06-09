@@ -662,12 +662,16 @@ main {
           appearance: none;
   border: none; }
   .event__input--destination {
-    width: 150px; }
+    width: 140px; }
     .event__input--destination::-webkit-calendar-picker-indicator {
       display: none; }
   .event__input--time {
-    width: 140px;
+    width: 150px;
     text-align: center; }
+  .event__input--time-validator {
+    width: 0;
+    border: none;
+    outline: none }
   .event__input--price {
     width: 66px; }
 

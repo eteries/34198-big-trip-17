@@ -1,14 +1,12 @@
 import { remove, render } from '../framework/render';
 import RouteView from '../view/route/route-view';
 import CostView from '../view/cost/cost-view';
-import NewPointButtonView from '../view/new-point-button/new-point-button-view';
 import { UpdateType } from '../constants';
 import { calculateCost, calculateTripEnd, calculateTripStart } from '../utils/calculate';
 import { getUniqueDestinations } from '../utils/destinations';
 
 export default class HeaderPresenter {
   #headerContainer;
-  #infoContainer;
 
   #costComponent;
   #routeComponent;
@@ -16,9 +14,8 @@ export default class HeaderPresenter {
   #tripModel;
   #offersModel;
 
-  constructor(headerContainer, infoContainer, tripModel, offersModel) {
+  constructor(headerContainer, tripModel, offersModel) {
     this.#headerContainer = headerContainer;
-    this.#infoContainer = infoContainer;
 
     this.#tripModel = tripModel;
     this.#offersModel = offersModel;
@@ -28,7 +25,6 @@ export default class HeaderPresenter {
 
   init() {
     this.#renderInfo();
-    this.#renderNewPointButton();
   }
 
   get cost() {
@@ -47,16 +43,12 @@ export default class HeaderPresenter {
     return calculateTripEnd(this.#tripModel.points);
   }
 
-  #renderNewPointButton() {
-    render(new NewPointButtonView(), this.#headerContainer);
-  }
-
   #renderInfo() {
     this.#routeComponent = new RouteView(this.destinations, this.startDate, this.endDate);
     this.#costComponent = new CostView(this.cost);
 
-    render(this.#routeComponent, this.#infoContainer);
-    render(this.#costComponent, this.#infoContainer);
+    render(this.#routeComponent, this.#headerContainer);
+    render(this.#costComponent, this.#headerContainer);
   }
 
   #reRenderInfo() {

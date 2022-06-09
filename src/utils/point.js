@@ -30,6 +30,17 @@ const mapStateToPoint = (state) => {
   return point;
 };
 
+const createEmptyPoint = () => ({
+  id: getUniqueRandomInt(IDRange.MIN, IDRange.MAX)(),
+  isFavorite: false,
+  type: POINT_TYPES[0],
+  dateFrom: getToday(),
+  dateTo: getToday(),
+  basePrice: 0,
+  offers: [],
+  destination: null,
+});
+
 const sortPoints = (points, sortType) => {
   switch (sortType) {
     case SortType.START_DATE:
@@ -59,4 +70,4 @@ const filterPoints = (points, filterType) => {
   }
 };
 
-export { mapPointToState, mapStateToPoint, filterPoints, sortPoints };
+export { createEmptyPoint, mapPointToState, mapStateToPoint, filterPoints, sortPoints };

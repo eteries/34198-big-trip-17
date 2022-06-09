@@ -30,6 +30,36 @@ export default class PointPresenter {
     this.#destinations = destinations;
     this.#offers = offers;
 
+    this.#createOrUpdateViews();
+  }
+
+  reset() {
+    if (this.#mode !== Mode.Closed) {
+      this.#closeEditor();
+    }
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
+  }
+
+  openEditor() {
+    this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);
+    this.#onOpen();
+    this.#pointEditComponent.setDatepickers();
+    this.#mode = Mode.Open;
+    this.#pointEditComponent.element.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+
+  #closeEditor() {
+    this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
+    document.removeEventListener('keydown', this.#onEscKeyDown);
+    this.#mode = Mode.Closed;
+    this.#pointEditComponent.removeDatepickers();
+  }
+
+  #createOrUpdateViews() {
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
@@ -55,31 +85,6 @@ export default class PointPresenter {
     prevPointEditComponent.removeElement();
   }
 
-  reset() {
-    if (this.#mode !== Mode.Closed) {
-      this.#closeEditor();
-    }
-  }
-
-  destroy() {
-    remove(this.#pointComponent);
-    remove(this.#pointEditComponent);
-  }
-
-  #openEditor() {
-    this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);
-    this.#onOpen();
-    this.#pointEditComponent.setDatepickers();
-    this.#mode = Mode.Open;
-  }
-
-  #closeEditor() {
-    this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
-    document.removeEventListener('keydown', this.#onEscKeyDown);
-    this.#mode = Mode.Closed;
-    this.#pointEditComponent.removeDatepickers();
-  }
-
   #renderPoint() {
     render(this.#pointComponent, this.#container);
   }
@@ -96,7 +101,7 @@ export default class PointPresenter {
 
   #setHandlers() {
     this.#pointComponent.setOpenClickHandler(() => {
-      this.#openEditor();
+      this.openEditor();
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
 

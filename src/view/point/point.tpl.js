@@ -27,7 +27,8 @@ export const createPointTemplate = (point, availableOffers) => {
     basePrice = 0,
     offers = [],
     isFavorite} = point;
-  const {name: destinationName = ''} = destination;
+
+  const destinationName = destination?.name ?? '';
 
   const dateFromAttr = formatDate(dateFrom, 'YYYY-MM-DD');
   const timeFrom = formatDate(dateFrom, 'HH:mm');
