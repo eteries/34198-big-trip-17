@@ -50,4 +50,10 @@ export const UpdateType = {
   POINT: 'POINT',
   LIST: 'LIST',
   TRIP: 'TRIP',
+  INIT: 'INIT',
+  ERROR: 'ERROR',
 };
+
+export const AUTHORIZATION = 'Basic W34wERcnWOWprx';
+
+export const END_POINT = 'https://17.ecmascript.pages.academy/big-trip';

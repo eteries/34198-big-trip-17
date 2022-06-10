@@ -70,4 +70,38 @@ const filterPoints = (points, filterType) => {
   }
 };
 
-export { createEmptyPoint, mapPointToState, mapStateToPoint, filterPoints, sortPoints };
+const mapPointDtoToPoint = (dto) => {
+  const point = {
+    ...dto,
+    basePrice: dto.base_price,
+    dateFrom: dto.date_from,
+    dateTo: dto.date_to,
+    isFavorite: dto.is_favorite,
+  };
+
+  delete point.base_price;
+  delete point.date_from;
+  delete point.date_to;
+  delete point.is_favorite;
+
+  return point;
+};
+
+const mapPointToPointDto = (point) => {
+  const dto = {
+    ...point,
+    'base_price': point.basePrice,
+    'date_from': point.dateFrom,
+    'date_to': point.dateTo,
+    'is_favorite': point.isFavorite,
+  };
+
+  delete dto.basePrice;
+  delete dto.dateFrom;
+  delete dto.dateTo;
+  delete dto.isFavorite;
+
+  return dto;
+};
+
+export { createEmptyPoint, mapPointToState, mapStateToPoint, mapPointToPointDto, mapPointDtoToPoint, filterPoints, sortPoints };

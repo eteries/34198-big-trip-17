@@ -66,6 +66,9 @@ export default class HeaderPresenter {
     switch (updateType) {
       case UpdateType.TRIP:
         this.#reRenderInfo();
+        break;
+      case UpdateType.INIT:
+        this.init();
     }
   };
 }

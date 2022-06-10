@@ -52,8 +52,6 @@ export default class TripPresenter {
   init() {
     this.#destinations = [...this.#destinationsModel.destinations];
     this.#offers = [...this.#offersModel.offers];
-
-    this.#createViews();
   }
 
   get points() {
@@ -179,11 +177,14 @@ export default class TripPresenter {
       case UpdateType.TRIP:
         this.#reRenderTrip();
         break;
+      case UpdateType.INIT:
+        this.#createViews();
+        break;
     }
   };
 
-  #handleFilterModelEvent = (updateType, point) => {
+  #handleFilterModelEvent = (updateType) => {
     this.#currentSort = SortType.START_DATE;
-    this.#handleModelEvent(updateType, point);
+    this.#handleModelEvent(updateType);
   };
 }
