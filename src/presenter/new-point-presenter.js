@@ -47,6 +47,13 @@ export default class NewPointPresenter {
     this.#onOpen();
   }
 
+  setSaving = () => {
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  };
+
   #setHandlers() {
     document.addEventListener('keydown', this.#onEscKeyDown);
 
@@ -60,7 +67,6 @@ export default class NewPointPresenter {
         UpdateType.TRIP,
         update
       );
-      this.destroy();
     });
 
     this.#pointEditComponent.setDeleteHandler(() => this.destroy());

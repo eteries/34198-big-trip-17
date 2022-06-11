@@ -44,6 +44,24 @@ export default class PointPresenter {
     remove(this.#pointEditComponent);
   }
 
+  setSaving = () => {
+    if (this.#mode === Mode.Open) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  };
+
+  setDeleting = () => {
+    if (this.#mode === Mode.Open) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  };
+
   openEditor() {
     this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);
     this.#onOpen();
@@ -78,7 +96,8 @@ export default class PointPresenter {
     }
 
     if (this.#mode === Mode.Open) {
-      prevPointEditComponent.element.replaceWith(this.#pointEditComponent.element);
+      prevPointEditComponent.element.replaceWith(this.#pointComponent.element);
+      this.#mode = Mode.Closed;
     }
 
     prevPointComponent.removeElement();
@@ -110,7 +129,6 @@ export default class PointPresenter {
     });
 
     this.#pointEditComponent.setSubmitHandler((update) => {
-      this.#closeEditor();
       this.#onUpdate(
         UserAction.UPDATE_POINT,
         UpdateType.TRIP,
@@ -123,7 +141,6 @@ export default class PointPresenter {
     });
 
     this.#pointEditComponent.setDeleteHandler((deletedPoint) => {
-      this.#closeEditor();
       document.removeEventListener('keydown', this.#onEscKeyDown);
       this.#onUpdate(
         UserAction.DELETE_POINT,

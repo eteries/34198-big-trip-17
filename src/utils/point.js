@@ -16,6 +16,9 @@ const mapPointToState = (point) => {
 
   state.dateFromValue = formatDate(state.dateFrom, 'DD/MM/YY HH:mm');
   state.dateToValue = formatDate(state.dateTo, 'DD/MM/YY HH:mm');
+  state.isDisabled = false;
+  state.isSaving = false;
+  state.isDeleting = false;
 
   return state;
 };
@@ -89,6 +92,9 @@ const mapPointToDto = (point) => {
   delete dto.dateFrom;
   delete dto.dateTo;
   delete dto.isFavorite;
+  delete dto.isDisabled;
+  delete dto.isSaving;
+  delete dto.isDeleting;
 
   return dto;
 };
