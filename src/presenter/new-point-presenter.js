@@ -47,12 +47,24 @@ export default class NewPointPresenter {
     this.#onOpen();
   }
 
-  setSaving = () => {
+  setSaving() {
     this.#pointEditComponent.updateElement({
       isDisabled: true,
       isSaving: true,
     });
-  };
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  }
 
   #setHandlers() {
     document.addEventListener('keydown', this.#onEscKeyDown);

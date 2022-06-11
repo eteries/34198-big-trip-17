@@ -44,23 +44,40 @@ export default class PointPresenter {
     remove(this.#pointEditComponent);
   }
 
-  setSaving = () => {
+  setSaving() {
     if (this.#mode === Mode.Open) {
       this.#pointEditComponent.updateElement({
         isDisabled: true,
         isSaving: true,
       });
     }
-  };
+  }
 
-  setDeleting = () => {
+  setDeleting() {
     if (this.#mode === Mode.Open) {
       this.#pointEditComponent.updateElement({
         isDisabled: true,
         isDeleting: true,
       });
     }
-  };
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.Closed) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  }
 
   openEditor() {
     this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);

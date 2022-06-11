@@ -148,7 +148,7 @@ export const createPointEditTemplate = (point, destinations = [], availableOffer
             ${isSaving ? 'Saving...' : 'Save'}
           </button>
           <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>
-            ${isDeleting ? 'Canceling...' : 'Cancel'}
+            ${isDeleting ? 'Deleting...' : 'Delete'}
           </button>
           <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
             <span class="visually-hidden">Close event</span>
