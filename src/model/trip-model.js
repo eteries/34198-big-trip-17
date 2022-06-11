@@ -1,30 +1,32 @@
 import { UpdateType } from '../constants.js';
 import Observable from '../framework/observable.js';
-import { mapPointDtoToPoint } from '../utils/point';
+import { mapDtoToPoint, mapPointToDto } from '../utils/point';
 
 export default class TripModel extends Observable {
   #pointsApiService = null;
-  #points = [];
+  #points = null;
 
   constructor(pointsApiService) {
     super();
     this.#pointsApiService = pointsApiService;
+
+    this.#init();
   }
 
   get points() {
     return this.#points;
   }
 
-  async init() {
+  async #init() {
     try {
       const points = await this.#pointsApiService.points;
-      this.#points = points.map(mapPointDtoToPoint);
+      this.#points = points.map(mapDtoToPoint);
     }
     catch(err) {
       this.#points = [];
     }
 
-    this._notify(UpdateType.INIT);
+    this._notify(UpdateType.INIT, this.#points);
   }
 
   async updatePoint(updateType, update) {
@@ -35,8 +37,8 @@ export default class TripModel extends Observable {
     }
 
     try {
-      const response = await this.#pointsApiService.updatePoint(update);
-      const updatedPoint = mapPointDtoToPoint(response);
+      const response = await this.#pointsApiService.updatePoint(mapPointToDto(update));
+      const updatedPoint = mapDtoToPoint(response);
       this.#points = [
         ...this.#points.slice(0, index),
         updatedPoint,
@@ -51,8 +53,8 @@ export default class TripModel extends Observable {
 
   async addPoint(updateType, update) {
     try {
-      const response = await this.#pointsApiService.addPoint(update);
-      const newPoint = mapPointDtoToPoint(response);
+      const response = await this.#pointsApiService.addPoint(mapPointToDto(update));
+      const newPoint = mapDtoToPoint(response);
       this.#points = [newPoint, ...this.#points];
       this._notify(updateType, newPoint);
     }

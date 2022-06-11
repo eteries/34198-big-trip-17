@@ -20,14 +20,6 @@ const destinationsModel = new DestinationsModel(new DestinationsApiService(END_P
 const offersModel = new OffersModel(new OffersApiService(END_POINT, AUTHORIZATION));
 const filtersModel = new FiltersModel();
 
-tripModel.init();
-destinationsModel.init();
-offersModel.init();
-
-const headerPresenter = new HeaderPresenter(tripInfoElement, tripModel, offersModel);
-const filtersPresenter = new FiltersPresenter(filtersElement, filtersModel, tripModel);
-const tripPresenter = new TripPresenter(eventsElement, mainElement, tripModel, destinationsModel, offersModel, filtersModel);
-
-headerPresenter.init();
-filtersPresenter.init();
-tripPresenter.init();
+new TripPresenter(eventsElement, mainElement, tripModel, destinationsModel, offersModel, filtersModel);
+new HeaderPresenter(tripInfoElement, tripModel, offersModel);
+new FiltersPresenter(filtersElement, filtersModel, tripModel);

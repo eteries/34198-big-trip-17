@@ -51,7 +51,7 @@ export const UpdateType = {
   LIST: 'LIST',
   TRIP: 'TRIP',
   INIT: 'INIT',
-  ERROR: 'ERROR',
+  ERROR: 'ERROR'
 };
 
 export const AUTHORIZATION = 'Basic W34wERcnWOWprx';

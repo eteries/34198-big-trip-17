@@ -1,11 +1,10 @@
-import { Filter as Filters, IDRange, POINT_TYPES, SortType } from '../constants';
+import { Filter as Filters, POINT_TYPES, SortType } from '../constants';
 import { formatDate, getDifference, getDuration, getToday, getUnixNum } from './date';
-import { getUniqueRandomInt } from './random';
 
 const mapPointToState = (point) => {
   const state = {
     ...point,
-    id: point.id ?? getUniqueRandomInt(IDRange.MIN, IDRange.MAX)(),
+    id: point.id,
     isFavorite: point.isFavorite ?? false,
     type: point.type ?? POINT_TYPES[0],
     dateFrom: point.dateFrom ?? getToday(),
@@ -29,17 +28,6 @@ const mapStateToPoint = (state) => {
 
   return point;
 };
-
-const createEmptyPoint = () => ({
-  id: getUniqueRandomInt(IDRange.MIN, IDRange.MAX)(),
-  isFavorite: false,
-  type: POINT_TYPES[0],
-  dateFrom: getToday(),
-  dateTo: getToday(),
-  basePrice: 0,
-  offers: [],
-  destination: null,
-});
 
 const sortPoints = (points, sortType) => {
   switch (sortType) {
@@ -70,7 +58,7 @@ const filterPoints = (points, filterType) => {
   }
 };
 
-const mapPointDtoToPoint = (dto) => {
+const mapDtoToPoint = (dto) => {
   const point = {
     ...dto,
     basePrice: dto.base_price,
@@ -87,13 +75,14 @@ const mapPointDtoToPoint = (dto) => {
   return point;
 };
 
-const mapPointToPointDto = (point) => {
+const mapPointToDto = (point) => {
   const dto = {
     ...point,
     'base_price': point.basePrice,
     'date_from': point.dateFrom,
     'date_to': point.dateTo,
     'is_favorite': point.isFavorite,
+    'type': point.type.toLowerCase(),
   };
 
   delete dto.basePrice;
@@ -104,4 +93,4 @@ const mapPointToPointDto = (point) => {
   return dto;
 };
 
-export { createEmptyPoint, mapPointToState, mapStateToPoint, mapPointToPointDto, mapPointDtoToPoint, filterPoints, sortPoints };
+export { mapPointToState, mapStateToPoint, mapPointToDto, mapDtoToPoint, filterPoints, sortPoints };

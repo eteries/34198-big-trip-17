@@ -15,20 +15,12 @@ export default class FiltersPresenter {
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filtersModel.addObserver(this.#handleModelEvent);
+
+    this.#init();
   }
 
-  init() {
+  #init() {
     this.#createOrUpdateView();
-  }
-
-  destroy() {
-    remove(this.#filtersComponent);
-    this.#filtersComponent = null;
-
-    this.#pointsModel.removeObserver(this.#handleModelEvent);
-    this.#filtersModel.removeObserver(this.#handleModelEvent);
-
-    this.#filtersModel.setFilter(UpdateType.TRIP, Filter.EVERYTHING);
   }
 
   #createOrUpdateView() {
@@ -46,12 +38,22 @@ export default class FiltersPresenter {
     remove(prevFiltersComponent);
   }
 
+  destroy() {
+    remove(this.#filtersComponent);
+    this.#filtersComponent = null;
+
+    this.#pointsModel.removeObserver(this.#handleModelEvent);
+    this.#filtersModel.removeObserver(this.#handleModelEvent);
+
+    this.#filtersModel.setFilter(UpdateType.TRIP, Filter.EVERYTHING);
+  }
+
   #renderFilters() {
     render(this.#filtersComponent, this.#container);
   }
 
   #handleModelEvent = () => {
-    this.init();
+    this.#createOrUpdateView();
   };
 
   #handleFilterChange = (filterType) => {

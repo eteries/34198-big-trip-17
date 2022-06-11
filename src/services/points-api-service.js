@@ -6,7 +6,7 @@ export default class PointsApiService extends ApiService {
       .then(ApiService.parseResponse);
   }
 
-  async createPoint(point) {
+  async addPoint(point) {
     const response = await this._load({
       url: 'points',
       method: 'POST',

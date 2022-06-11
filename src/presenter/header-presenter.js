@@ -21,10 +21,20 @@ export default class HeaderPresenter {
     this.#offersModel = offersModel;
 
     this.#tripModel.addObserver(this.#handleModelEvent);
+
+    this.#init();
   }
 
-  init() {
-    this.#renderInfo();
+  #init() {
+    if (!this.#tripModel.points) {
+      return;
+    }
+
+    this.#routeComponent = new RouteView(this.destinations, this.startDate, this.endDate);
+    this.#costComponent = new CostView(this.cost);
+
+    render(this.#routeComponent, this.#headerContainer);
+    render(this.#costComponent, this.#headerContainer);
   }
 
   get cost() {
@@ -43,23 +53,11 @@ export default class HeaderPresenter {
     return calculateTripEnd(this.#tripModel.points);
   }
 
-  #renderInfo() {
-    if (this.#tripModel.points.length === 0) {
-      return;
-    }
-
-    this.#routeComponent = new RouteView(this.destinations, this.startDate, this.endDate);
-    this.#costComponent = new CostView(this.cost);
-
-    render(this.#routeComponent, this.#headerContainer);
-    render(this.#costComponent, this.#headerContainer);
-  }
-
   #reRenderInfo() {
     remove(this.#costComponent);
     remove(this.#routeComponent);
 
-    this.#renderInfo();
+    this.#init();
   }
 
   #handleModelEvent = (updateType) => {
@@ -68,7 +66,7 @@ export default class HeaderPresenter {
         this.#reRenderInfo();
         break;
       case UpdateType.INIT:
-        this.init();
+        this.#init();
     }
   };
 }

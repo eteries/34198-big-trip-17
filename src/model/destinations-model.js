@@ -8,19 +8,22 @@ export default class DestinationsModel extends Observable {
   constructor(destinationsApiService) {
     super();
     this.#destinationsApiService = destinationsApiService;
+
+    this.#init();
   }
 
   get destinations() {
     return this.#destinations;
   }
 
-  async init() {
+  async #init() {
     try {
       this.#destinations = await this.#destinationsApiService.destinations;
+      this._notify(UpdateType.LIST, this.#destinations);
     }
     catch(err) {
       this.#destinations = [];
-      this._notify(UpdateType.ERROR);
+      this._notify(UpdateType.ERROR, this.#destinations);
     }
   }
 }

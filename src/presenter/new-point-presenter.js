@@ -26,7 +26,11 @@ export default class NewPointPresenter {
     this.#destinations = destinations;
     this.#offers = offers;
 
-    this.#createView();
+    this.#pointEditComponent = new PointEditView(this.#point, this.#destinations, this.#offers);
+    this.#setHandlers();
+    this.#pointEditComponent.setDatepickers();
+    render(this.#pointEditComponent, this.#container, RenderPosition.AFTERBEGIN);
+    this.#setDefaultFocus();
   }
 
   reset() {
@@ -41,14 +45,6 @@ export default class NewPointPresenter {
 
   openEditor() {
     this.#onOpen();
-  }
-
-  #createView() {
-    this.#pointEditComponent = new PointEditView(this.#point, this.#destinations, this.#offers);
-    this.#setHandlers();
-    this.#pointEditComponent.setDatepickers();
-    render(this.#pointEditComponent, this.#container, RenderPosition.AFTERBEGIN);
-    this.#setDefaultFocus();
   }
 
   #setHandlers() {
