@@ -1,8 +1,8 @@
 const createFiltersListTemplate = (filters, activeFilter) => (
   filters
-    .map((name) => (
+    .map(({name, number}) => (
       `<div class="trip-filters__filter">
-        <input id="filter-${name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${name}" ${activeFilter === name ? 'checked' : ''}>
+        <input id="filter-${name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${name}" ${activeFilter === name ? 'checked' : ''} ${number === 0  ? 'disabled' : ''}>
         <label class="trip-filters__filter-label" for="filter-${name}">${name}</label>
       </div>`
     ))

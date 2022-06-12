@@ -1,4 +1,5 @@
 import { Filter, WelcomeMessage } from '../constants';
+import { filterPoints } from './point';
 
 const mapFilterToMessage = (filter) => {
   switch(filter) {
@@ -12,4 +13,9 @@ const mapFilterToMessage = (filter) => {
   }
 };
 
-export { mapFilterToMessage };
+const mapFilterToAmount = (filter, points) => ({
+  name: filter,
+  number: filterPoints(points, filter).length,
+});
+
+export { mapFilterToMessage, mapFilterToAmount };

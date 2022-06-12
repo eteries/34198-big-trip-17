@@ -1,19 +1,20 @@
 import { Filter, UpdateType } from '../constants';
 import { remove, render } from '../framework/render';
 import FiltersView from '../view/filters/filters-view';
+import { mapFilterToAmount } from '../utils/filters';
 
 export default class FiltersPresenter {
   #container;
   #filtersComponent = null;
   #filtersModel;
-  #pointsModel;
+  #tripModel;
 
-  constructor(container, filtersModel, pointsModel) {
+  constructor(container, filtersModel, tripModel) {
     this.#container = container;
     this.#filtersModel = filtersModel;
-    this.#pointsModel = pointsModel;
+    this.#tripModel = tripModel;
 
-    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#tripModel.addObserver(this.#handleModelEvent);
     this.#filtersModel.addObserver(this.#handleModelEvent);
 
     this.#init();
@@ -23,10 +24,15 @@ export default class FiltersPresenter {
     this.#createOrUpdateView();
   }
 
+  get filters() {
+    return this.#filtersModel.filters
+      .map((filter) => mapFilterToAmount(filter, this.#tripModel.points));
+  }
+
   #createOrUpdateView() {
     const prevFiltersComponent = this.#filtersComponent;
 
-    this.#filtersComponent = new FiltersView(this.#filtersModel.filters, this.#filtersModel.currentFilter);
+    this.#filtersComponent = new FiltersView(this.filters, this.#filtersModel.currentFilter);
     this.#filtersComponent.setFilterChangeHandler(this.#handleFilterChange);
 
     if (!prevFiltersComponent) {
@@ -42,7 +48,7 @@ export default class FiltersPresenter {
     remove(this.#filtersComponent);
     this.#filtersComponent = null;
 
-    this.#pointsModel.removeObserver(this.#handleModelEvent);
+    this.#tripModel.removeObserver(this.#handleModelEvent);
     this.#filtersModel.removeObserver(this.#handleModelEvent);
 
     this.#filtersModel.setFilter(UpdateType.TRIP, Filter.EVERYTHING);
