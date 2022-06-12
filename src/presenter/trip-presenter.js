@@ -2,6 +2,7 @@ import { BlockerTime, SortType, UpdateType, UserAction } from '../constants';
 import { remove, render, RenderPosition } from '../framework/render';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
 import EmptyView from '../view/empty/empty-view';
+import ErrorView from '../view/error/error-view';
 import NewPointButtonView from '../view/new-point-button/new-point-button-view';
 import PointsView from '../view/points/points-view';
 import SortingView from '../view/sorting/sorting-view';
@@ -16,6 +17,7 @@ export default class TripPresenter {
   #pointsComponent = null;
   #sortingComponent = null;
   #emptyComponent = null;
+  #errorComponent = null;
   #newPointButtonComponent = null;
 
   #destinationsModel;
@@ -29,6 +31,7 @@ export default class TripPresenter {
   #currentFilter;
 
   #uiBlocker = new UiBlocker(BlockerTime.MIN, BlockerTime.MAX);
+  #hasError = false;
 
   constructor(tripContainer, buttonContainer, tripModel, destinationsModel, offersModel, filtersModel) {
     this.#tripContainer = tripContainer;
@@ -55,8 +58,8 @@ export default class TripPresenter {
     this.#pointsComponent = new PointsView();
     this.#sortingComponent = new SortingView(SortType, this.#currentSort);
 
-    this.#renderTrip();
     this.#renderNewPointButton();
+    this.#renderTrip();
   }
 
   get points() {
@@ -80,6 +83,12 @@ export default class TripPresenter {
   }
 
   #renderTrip() {
+    if (this.#hasError) {
+      this.#renderError();
+      remove(this.#newPointButtonComponent);
+      return;
+    }
+
     if (this.points.length === 0) {
       this.#renderEmptyTrip();
       return;
@@ -96,6 +105,7 @@ export default class TripPresenter {
 
     remove(this.#sortingComponent);
     remove(this.#emptyComponent);
+    remove(this.#errorComponent);
     this.#clearPointsList();
 
     this.#renderTrip();
@@ -139,6 +149,11 @@ export default class TripPresenter {
   #renderSort() {
     render(this.#sortingComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
     this.#sortingComponent.setSortingChangeHandler(this.#handleSortTypeChange);
+  }
+
+  #renderError() {
+    this.#errorComponent = new ErrorView();
+    render(this.#errorComponent, this.#tripContainer);
   }
 
   #clearPointsList() {
@@ -219,6 +234,10 @@ export default class TripPresenter {
         this.#reRenderPointsList();
         break;
       case UpdateType.TRIP:
+        this.#reRenderTrip();
+        break;
+      case UpdateType.ERROR:
+        this.#hasError = true;
         this.#reRenderTrip();
     }
   };

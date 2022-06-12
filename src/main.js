@@ -21,5 +21,5 @@ const offersModel = new OffersModel(new OffersApiService(END_POINT, AUTHORIZATIO
 const filtersModel = new FiltersModel();
 
 new TripPresenter(eventsElement, mainElement, tripModel, destinationsModel, offersModel, filtersModel);
-new HeaderPresenter(tripInfoElement, tripModel, offersModel);
+new HeaderPresenter(tripInfoElement, tripModel, offersModel, destinationsModel);
 new FiltersPresenter(filtersElement, filtersModel, tripModel);

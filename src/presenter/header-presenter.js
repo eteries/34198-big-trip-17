@@ -1,7 +1,7 @@
+import { UpdateType } from '../constants';
 import { remove, render } from '../framework/render';
 import RouteView from '../view/route/route-view';
 import CostView from '../view/cost/cost-view';
-import { UpdateType } from '../constants';
 import { calculateCost, calculateTripEnd, calculateTripStart } from '../utils/calculate';
 import { getDestinationsNamesByDate } from '../utils/destinations';
 
@@ -13,20 +13,25 @@ export default class HeaderPresenter {
 
   #tripModel;
   #offersModel;
+  #destinationsModel;
 
-  constructor(headerContainer, tripModel, offersModel) {
+  #hasError = false;
+
+  constructor(headerContainer, tripModel, offersModel, destinationsModel) {
     this.#headerContainer = headerContainer;
 
     this.#tripModel = tripModel;
     this.#offersModel = offersModel;
+    this.#destinationsModel = destinationsModel;
 
     this.#tripModel.addObserver(this.#handleModelEvent);
+    this.#destinationsModel.addObserver(this.#handleModelEvent);
 
     this.#init();
   }
 
   #init() {
-    if (!this.#tripModel.points) {
+    if (this.#hasError || !this.#tripModel.points) {
       return;
     }
 
@@ -62,11 +67,15 @@ export default class HeaderPresenter {
 
   #handleModelEvent = (updateType) => {
     switch (updateType) {
+      case UpdateType.INIT:
+        this.#init();
+        break;
       case UpdateType.TRIP:
         this.#reRenderInfo();
         break;
-      case UpdateType.INIT:
-        this.#init();
+      case UpdateType.ERROR:
+        this.#hasError = true;
+        this.#reRenderInfo();
     }
   };
 }
