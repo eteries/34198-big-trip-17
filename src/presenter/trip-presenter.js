@@ -3,6 +3,7 @@ import { remove, render, RenderPosition } from '../framework/render';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
 import EmptyView from '../view/empty/empty-view';
 import ErrorView from '../view/error/error-view';
+import LoadingView from '../view/loading/loading-view';
 import NewPointButtonView from '../view/new-point-button/new-point-button-view';
 import PointsView from '../view/points/points-view';
 import SortingView from '../view/sorting/sorting-view';
@@ -19,6 +20,7 @@ export default class TripPresenter {
   #emptyComponent = null;
   #errorComponent = null;
   #newPointButtonComponent = null;
+  #loadingComponent = null;
 
   #destinationsModel;
   #offersModel;
@@ -52,6 +54,8 @@ export default class TripPresenter {
     this.#filtersModel.addObserver(this.#handleModelEvent);
     this.#offersModel.addObserver(this.#handleModelEvent);
     this.#destinationsModel.addObserver(this.#handleModelEvent);
+
+    this.#renderLoading();
   }
 
   #init() {
@@ -59,6 +63,8 @@ export default class TripPresenter {
     this.#sortingComponent = new SortingView(SortType, this.#currentSort);
 
     this.#renderNewPointButton();
+
+    remove(this.#loadingComponent);
     this.#renderTrip();
   }
 
@@ -154,6 +160,11 @@ export default class TripPresenter {
   #renderError() {
     this.#errorComponent = new ErrorView();
     render(this.#errorComponent, this.#tripContainer);
+  }
+
+  #renderLoading() {
+    this.#loadingComponent = new LoadingView();
+    render(this.#loadingComponent, this.#tripContainer);
   }
 
   #clearPointsList() {
