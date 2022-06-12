@@ -10,11 +10,6 @@ export const WelcomeMessage = {
   FUTURE: 'There are no future events now',
 };
 
-export const IDRange = {
-  MIN: 1,
-  MAX: 9999,
-};
-
 export const Mode = {
   Closed: 'Closed',
   Open: 'Open',
@@ -52,6 +47,11 @@ export const UpdateType = {
   TRIP: 'TRIP',
   INIT: 'INIT',
   ERROR: 'ERROR'
+};
+
+export const BlockerTime = {
+  MIN: 350,
+  MAX: 1000,
 };
 
 export const AUTHORIZATION = 'Basic W34wERcnWOWprx';

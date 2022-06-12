@@ -1,12 +1,13 @@
-import { SortType, UpdateType, UserAction } from '../constants';
+import { BlockerTime, SortType, UpdateType, UserAction } from '../constants';
 import { remove, render, RenderPosition } from '../framework/render';
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
+import EmptyView from '../view/empty/empty-view';
+import NewPointButtonView from '../view/new-point-button/new-point-button-view';
 import PointsView from '../view/points/points-view';
 import SortingView from '../view/sorting/sorting-view';
 import { filterPoints, mapPointToState, sortPoints } from '../utils/point';
 
 import PointPresenter from './point-presenter';
-import EmptyView from '../view/empty/empty-view';
-import NewPointButtonView from '../view/new-point-button/new-point-button-view';
 import NewPointPresenter from './new-point-presenter';
 
 export default class TripPresenter {
@@ -26,6 +27,8 @@ export default class TripPresenter {
 
   #currentSort;
   #currentFilter;
+
+  #uiBlocker = new UiBlocker(BlockerTime.MIN, BlockerTime.MAX);
 
   constructor(tripContainer, buttonContainer, tripModel, destinationsModel, offersModel, filtersModel) {
     this.#tripContainer = tripContainer;
@@ -170,6 +173,8 @@ export default class TripPresenter {
   };
 
   #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointPresenters.get(update.id).setSaving();
@@ -198,6 +203,7 @@ export default class TripPresenter {
           this.#pointPresenters.get(update.id).setAborting();
         }
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, point) => {
