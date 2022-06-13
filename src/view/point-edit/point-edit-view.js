@@ -2,8 +2,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 import AbstractStatefulView from '../../framework/view/abstract-stateful-view';
 import { getUnixNum, setDateTimePicker } from '../../utils/date';
-import { highlightElement } from '../../utils/dom';
-import { getOffersByType } from '../../utils/filter';
+import { getOffersByType } from '../../utils/offers';
 import { mapPointToState, mapStateToPoint } from '../../utils/point';
 import { addItem, removeItem } from '../../utils/update';
 
@@ -40,6 +39,12 @@ export default class PointEditView extends AbstractStatefulView {
     editForm.addEventListener('submit', this.#onSubmit);
   }
 
+  setDeleteHandler(cb) {
+    this._callback.onDelete = cb;
+    const editForm = this.element.querySelector('.event--edit');
+    editForm.addEventListener('reset', this.#onDelete);
+  }
+
   setDatepickers() {
     this.#datepickers.dateFrom = setDateTimePicker({
       element: this.element.querySelector('#event-start-time-1'),
@@ -65,18 +70,34 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   #validateDate() {
-    const dateTo = this.element.querySelector('.event__field-group--time');
-    const isValid = getUnixNum(this._state.dateFrom) <= getUnixNum(this._state.dateTo);
+    const timeControl = this.element.querySelector('.event__input--time-validator');
+    if (getUnixNum(this._state.dateFrom) < getUnixNum(this._state.dateTo)) {
+      timeControl.setCustomValidity('');
 
-    return {
-      isValid,
-      element: dateTo
-    };
+    }
+    else {
+      timeControl.setCustomValidity('The starting time has to be before the ending one');
+    }
+
+    timeControl.reportValidity();
+  }
+
+  #validatePrice() {
+    const priceControl = this.element.querySelector('.event__input--price');
+
+    if (Number.isInteger(this._state.basePrice) && this._state.basePrice > 0) {
+      priceControl.setCustomValidity('');
+    }
+    else {
+      priceControl.setCustomValidity('The price has to be a positive integer number');
+    }
+
+    priceControl.reportValidity();
   }
 
   #setInnerHandlers() {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#onTypeChange);
-    this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationChange);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#onDestinationChange);
     this.element.querySelector('.event__details').addEventListener('change', this.#onOffersChange);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceChange);
   }
@@ -100,24 +121,20 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #onPriceChange = ({target}) => {
-    const basePrice = parseInt(target.value, 10);
-
-    if (!isFinite(basePrice) || basePrice < 0) {
-      return;
-    }
-
-    this.updateElement({
-      basePrice,
+    this._setState({
+      basePrice: parseInt(target.value, 10),
     });
+
+    this.#validatePrice();
   };
 
   #onOffersChange = ({target: checkbox}) => {
-    const id = Number(checkbox.value);
+    const id = parseInt(checkbox.value, 10);
     const offers = checkbox.checked
       ? addItem(id, this._state.offers)
       : removeItem(id, this._state.offers);
 
-    this.updateElement({
+    this._setState({
       offers
     });
   };
@@ -125,31 +142,38 @@ export default class PointEditView extends AbstractStatefulView {
   #onSubmit = (evt) => {
     evt.preventDefault();
 
-    const {element, isValid} = this.#validateDate();
-    highlightElement(element, isValid);
-    if (isValid === false) {
-      return;
-    }
+    this.#validateDate();
+    this.#validatePrice();
 
-    this._callback.onSubmit(mapStateToPoint(this._state));
+    if (evt.target.checkValidity()) {
+      this._callback.onSubmit(mapStateToPoint(this._state));
+    }
+  };
+
+  #onDelete = (evt) => {
+    evt.preventDefault();
+    this._callback.onDelete(mapStateToPoint(this._state));
   };
 
   #onDateFromChange = ([dateFrom]) => {
-    this.updateElement({
+    this._setState({
       dateFrom,
     });
+    this.#validateDate();
   };
 
   #onDateToChange = ([dateTo]) => {
-    this.updateElement({
+    this._setState({
       dateTo,
     });
+    this.#validateDate();
   };
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setCloseClickHandler(this._callback.onCloseClick);
     this.setSubmitHandler(this._callback.onSubmit);
+    this.setDeleteHandler(this._callback.onDelete);
     this.setDatepickers();
   };
 

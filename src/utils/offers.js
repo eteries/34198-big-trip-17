@@ -5,6 +5,4 @@ const getOffersByType = (offers, type) => {
   return filtered !== undefined ? filtered.offers : [];
 };
 
-const getUniqueDestinations = (points) => [...new Set(points.map(({destination = {}}) => destination.name))];
-
-export { getOfferById, getOffersByType, getUniqueDestinations };
+export { getOfferById, getOffersByType };

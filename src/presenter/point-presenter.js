@@ -1,4 +1,4 @@
-import { Mode } from '../constants';
+import { Mode, UpdateType, UserAction } from '../constants';
 import { remove, render } from '../framework/render';
 import { isEscapeKey } from '../utils/dom';
 import PointView from '../view/point/point-view';
@@ -30,6 +30,36 @@ export default class PointPresenter {
     this.#destinations = destinations;
     this.#offers = offers;
 
+    this.#createOrUpdateViews();
+  }
+
+  reset() {
+    if (this.#mode !== Mode.Closed) {
+      this.#closeEditor();
+    }
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
+  }
+
+  openEditor() {
+    this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);
+    this.#onOpen();
+    this.#pointEditComponent.setDatepickers();
+    this.#mode = Mode.Open;
+    this.#pointEditComponent.element.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+
+  #closeEditor() {
+    this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
+    document.removeEventListener('keydown', this.#onEscKeyDown);
+    this.#mode = Mode.Closed;
+    this.#pointEditComponent.removeDatepickers();
+  }
+
+  #createOrUpdateViews() {
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
@@ -55,45 +85,23 @@ export default class PointPresenter {
     prevPointEditComponent.removeElement();
   }
 
-  reset() {
-    if (this.#mode !== Mode.Closed) {
-      this.#closeEditor();
-    }
-  }
-
-  destroy() {
-    remove(this.#pointComponent);
-    remove(this.#pointEditComponent);
-  }
-
-  #openEditor() {
-    this.#pointComponent.element.replaceWith(this.#pointEditComponent.element);
-    this.#onOpen();
-    this.#pointEditComponent.setDatepickers();
-    this.#mode = Mode.Open;
-  }
-
-  #closeEditor() {
-    this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
-    document.removeEventListener('keydown', this.#onEscKeyDown);
-    this.#mode = Mode.Closed;
-    this.#pointEditComponent.removeDatepickers();
-  }
-
   #renderPoint() {
     render(this.#pointComponent, this.#container);
   }
 
   #toggleFavorites() {
-    this.#onUpdate({
-      ...this.#point,
-      isFavorite: !this.#point.isFavorite,
-    });
+    this.#onUpdate(
+      UserAction.UPDATE_POINT,
+      UpdateType.POINT,
+      {
+        ...this.#point,
+        isFavorite: !this.#point.isFavorite,
+      });
   }
 
   #setHandlers() {
     this.#pointComponent.setOpenClickHandler(() => {
-      this.#openEditor();
+      this.openEditor();
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
@@ -103,11 +111,25 @@ export default class PointPresenter {
 
     this.#pointEditComponent.setSubmitHandler((update) => {
       this.#closeEditor();
-      this.#onUpdate((update));
+      this.#onUpdate(
+        UserAction.UPDATE_POINT,
+        UpdateType.TRIP,
+        update
+      );
     });
 
     this.#pointComponent.setFavoriteClickHandler(() => {
       this.#toggleFavorites();
+    });
+
+    this.#pointEditComponent.setDeleteHandler((deletedPoint) => {
+      this.#closeEditor();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+      this.#onUpdate(
+        UserAction.DELETE_POINT,
+        UpdateType.TRIP,
+        deletedPoint,
+      );
     });
   }
 

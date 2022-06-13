@@ -685,7 +685,7 @@ export const points = [
         }
       ]
     },
-    'basePrice': 500,
+    'basePrice': 20,
     'isFavorite': true,
     'offers': [
       1,

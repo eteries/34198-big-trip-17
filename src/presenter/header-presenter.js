@@ -1,28 +1,71 @@
-import { render } from '../framework/render';
+import { remove, render } from '../framework/render';
 import RouteView from '../view/route/route-view';
 import CostView from '../view/cost/cost-view';
-import NewPointButtonView from '../view/new-point-button/new-point-button-view';
+import { UpdateType } from '../constants';
 import { calculateCost, calculateTripEnd, calculateTripStart } from '../utils/calculate';
-import { getUniqueDestinations } from '../utils/filter';
+import { getDestinationsNamesByDate } from '../utils/destinations';
 
 export default class HeaderPresenter {
-  init(headerContainer, infoContainer, tripModel, offersModel) {
-    this.headerContainer = headerContainer;
-    this.infoContainer = infoContainer;
+  #headerContainer;
 
-    this.tripModel = tripModel;
-    this.offersModel = offersModel;
+  #costComponent = null;
+  #routeComponent = null;
 
-    this.points = [...this.tripModel.points];
-    this.offers = [...this.offersModel.offers];
+  #tripModel;
+  #offersModel;
 
-    this.cost = calculateCost(this.points, this.offers);
-    this.uniqueDestinations = getUniqueDestinations(this.points);
-    this.startDate = calculateTripStart(this.points);
-    this.endDate = calculateTripEnd(this.points);
+  constructor(headerContainer, tripModel, offersModel) {
+    this.#headerContainer = headerContainer;
 
-    render(new RouteView(this.uniqueDestinations, this.startDate, this.endDate), this.infoContainer);
-    render(new CostView(this.cost), this.infoContainer);
-    render(new NewPointButtonView(), this.headerContainer);
+    this.#tripModel = tripModel;
+    this.#offersModel = offersModel;
+
+    this.#tripModel.addObserver(this.#handleModelEvent);
   }
+
+  init() {
+    this.#renderInfo();
+  }
+
+  get cost() {
+    return calculateCost(this.#tripModel.points, this.#offersModel.offers);
+  }
+
+  get destinations() {
+    return getDestinationsNamesByDate(this.#tripModel.points);
+  }
+
+  get startDate() {
+    return calculateTripStart(this.#tripModel.points);
+  }
+
+  get endDate() {
+    return calculateTripEnd(this.#tripModel.points);
+  }
+
+  #renderInfo() {
+    if (this.#tripModel.points.length === 0) {
+      return;
+    }
+
+    this.#routeComponent = new RouteView(this.destinations, this.startDate, this.endDate);
+    this.#costComponent = new CostView(this.cost);
+
+    render(this.#routeComponent, this.#headerContainer);
+    render(this.#costComponent, this.#headerContainer);
+  }
+
+  #reRenderInfo() {
+    remove(this.#costComponent);
+    remove(this.#routeComponent);
+
+    this.#renderInfo();
+  }
+
+  #handleModelEvent = (updateType) => {
+    switch (updateType) {
+      case UpdateType.TRIP:
+        this.#reRenderInfo();
+    }
+  };
 }

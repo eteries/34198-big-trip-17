@@ -1,14 +1,20 @@
 import { Filter } from '../constants';
+import Observable from '../framework/observable';
 
-export default class FiltersModel {
+export default class FiltersModel extends Observable {
   #filters = Object.values(Filter);
-  #activeFilter = Filter.Everything;
+  #currentFilter = Filter.EVERYTHING;
 
   get filters() {
     return this.#filters;
   }
 
-  get activeFilter() {
-    return this.#activeFilter;
+  get currentFilter() {
+    return this.#currentFilter;
+  }
+
+  setFilter(updateType, filter) {
+    this.#currentFilter = filter;
+    this._notify(updateType, filter);
   }
 }

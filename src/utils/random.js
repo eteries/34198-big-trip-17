@@ -31,20 +31,4 @@ const getUniqueRandomInt = (from, to) => {
   };
 };
 
-const getRandomArrayElement = (array) => array[getRandomInt(0, array.length - 1)];
-
-const getRandomSubArray = (array) => {
-  const arrayCopy = [...array];
-
-  return new Array(getRandomInt(1, array.length))
-    .fill(null)
-    .map(() => arrayCopy.splice(getRandomInt(0, arrayCopy.length - 1),1)[0]);
-};
-
-const getRandomSubPhrase = (text) => {
-  const phrases = text.split('. ');
-
-  return getRandomSubArray(phrases).join('. ');
-};
-
-export { getRandomInt, getUniqueRandomInt, getRandomArrayElement, getRandomSubArray, getRandomSubPhrase };
+export { getRandomInt, getUniqueRandomInt };

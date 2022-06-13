@@ -4,6 +4,12 @@ export const Filter = {
   PAST: 'past',
 };
 
+export const WelcomeMessage = {
+  NEW: 'Click New Event to create your first point',
+  PAST: 'There are no past events now',
+  FUTURE: 'There are no future events now',
+};
+
 export const IDRange = {
   MIN: 1,
   MAX: 9999,
@@ -32,4 +38,16 @@ export const SortType = {
   DURATION: 'time',
   PRICE: 'price',
   OFFERS: 'offer'
+};
+
+export const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+export const UpdateType = {
+  POINT: 'POINT',
+  LIST: 'LIST',
+  TRIP: 'TRIP',
 };
