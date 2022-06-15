@@ -13,12 +13,14 @@ export default class NewPointPresenter {
 
   #onUpdate;
   #onOpen;
+  #onClose;
 
-  constructor(container, onUpdate, onOpen) {
+  constructor(container, onUpdate, onOpen, onClose) {
     this.#container = container;
 
     this.#onUpdate = onUpdate;
     this.#onOpen = onOpen;
+    this.#onClose = onClose;
   }
 
   init(point, destinations, offers) {
@@ -38,6 +40,7 @@ export default class NewPointPresenter {
   }
 
   destroy() {
+    this.#onClose();
     document.removeEventListener('keydown', this.#onEscKeyDown);
     this.#pointEditComponent.removeDatepickers();
     remove(this.#pointEditComponent);
@@ -69,9 +72,8 @@ export default class NewPointPresenter {
   #setHandlers() {
     document.addEventListener('keydown', this.#onEscKeyDown);
 
-    this.#pointEditComponent.setCloseClickHandler(() => {
-      this.destroy();
-    });
+    this.#pointEditComponent.setCloseClickHandler(() => this.destroy());
+    this.#pointEditComponent.setDeleteHandler(() => this.destroy());
 
     this.#pointEditComponent.setSubmitHandler((update) => {
       this.#onUpdate(
@@ -80,8 +82,6 @@ export default class NewPointPresenter {
         update
       );
     });
-
-    this.#pointEditComponent.setDeleteHandler(() => this.destroy());
   }
 
   #setDefaultFocus() {

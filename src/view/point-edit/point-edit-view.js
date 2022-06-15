@@ -13,11 +13,13 @@ export default class PointEditView extends AbstractStatefulView {
   #destinations = [];
   #offers = [];
   #datepickers = {};
+  #point;
 
   constructor(point, destinations, offers) {
     super();
 
     this._state = mapPointToState(point);
+    this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
 
@@ -31,7 +33,7 @@ export default class PointEditView extends AbstractStatefulView {
   setCloseClickHandler(cb) {
     this._callback.onCloseClick = cb;
     const closeButton = this.element.querySelector('.event__rollup-btn');
-    closeButton.addEventListener('click', this._callback.onCloseClick);
+    closeButton.addEventListener('click', this.#onClose);
   }
 
   setSubmitHandler(cb) {
@@ -106,6 +108,7 @@ export default class PointEditView extends AbstractStatefulView {
   #onTypeChange = ({target}) => {
     this.updateElement({
       type: target.value,
+      offers: [],
     });
   };
 
@@ -114,6 +117,7 @@ export default class PointEditView extends AbstractStatefulView {
 
     if (destination === undefined) {
       target.value = '';
+      this.shake();
       return;
     }
 
@@ -123,10 +127,12 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #onPriceChange = ({target}) => {
+    const basePrice = Regex.DIGITS.test(target.value) ? parseInt(target.value, 10) : '';
     this._setState({
-      basePrice: Regex.DIGITS.test(target.value) ? parseInt(target.value, 10) : '',
+      basePrice,
     });
 
+    target.value = basePrice;
     this.#validatePrice();
   };
 
@@ -157,6 +163,12 @@ export default class PointEditView extends AbstractStatefulView {
     this._callback.onDelete(mapStateToPoint(this._state));
   };
 
+  #onClose = (evt) => {
+    evt.preventDefault();
+    this.reset();
+    this._callback.onCloseClick();
+  };
+
   #onDateFromChange = ([dateFrom]) => {
     this._setState({
       dateFrom,
@@ -178,6 +190,10 @@ export default class PointEditView extends AbstractStatefulView {
     this.setDeleteHandler(this._callback.onDelete);
     this.setDatepickers();
   };
+
+  reset() {
+    this.updateElement(mapPointToState(this.#point));
+  }
 
   removeElement = () => {
     super.removeElement();

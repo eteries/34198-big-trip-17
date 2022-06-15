@@ -1,4 +1,4 @@
-import { BlockerTime, SortType, UpdateType, UserAction } from '../constants';
+import { BlockerTime, Filter, SortType, UpdateType, UserAction } from '../constants';
 import { remove, render, RenderPosition } from '../framework/render';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
 import EmptyView from '../view/empty/empty-view';
@@ -100,6 +100,7 @@ export default class TripPresenter {
       return;
     }
 
+    remove(this.#emptyComponent);
     this.#renderSort();
     this.#renderPointsList();
   }
@@ -153,6 +154,7 @@ export default class TripPresenter {
   }
 
   #renderSort() {
+    this.#sortingComponent = new SortingView(SortType, this.#currentSort);
     render(this.#sortingComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
     this.#sortingComponent.setSortingChangeHandler(this.#handleSortTypeChange);
   }
@@ -176,13 +178,25 @@ export default class TripPresenter {
     this.#currentSort = SortType.START_DATE;
   }
 
+  #enableButton = () => {
+    this.#newPointButtonComponent.updateElement({
+      isDisabled: false,
+    });
+  };
+
   #addNewPoint = () => {
-    const pointPresenter = new NewPointPresenter(this.#pointsComponent.element, this.#handleViewAction, this.#resetPointsList);
+    const pointPresenter = new NewPointPresenter(this.#pointsComponent.element, this.#handleViewAction, this.#resetPointsList, this.#enableButton);
     const newPoint = {};
     pointPresenter.init(mapPointToState(newPoint), this.destinations, this.offers);
 
+    this.#resetSortType();
+    this.#filtersModel.setFilter(UpdateType.TRIP, Filter.EVERYTHING);
     pointPresenter.openEditor();
     this.#pointPresenters.set(null, pointPresenter);
+    remove(this.#emptyComponent);
+    this.#newPointButtonComponent.updateElement({
+      isDisabled: true,
+    });
   };
 
   #resetPointsList = () => {
@@ -194,6 +208,7 @@ export default class TripPresenter {
       return;
     }
 
+    this.#filtersModel.setFilter(UpdateType.LIST, Filter.EVERYTHING);
     this.#currentSort = sortType;
     this.#reRenderPointsList();
   };
@@ -219,6 +234,9 @@ export default class TripPresenter {
         catch(err) {
           this.#pointPresenters.get(null).setAborting();
         }
+        this.#newPointButtonComponent.updateElement({
+          isDisabled: false,
+        });
         break;
       case UserAction.DELETE_POINT:
         this.#pointPresenters.get(update.id).setDeleting();

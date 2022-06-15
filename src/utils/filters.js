@@ -2,7 +2,7 @@ import { Filter, WelcomeMessage } from '../constants';
 import { filterPoints } from './point';
 
 const mapFilterToMessage = (filter) => {
-  switch(filter) {
+  switch (filter) {
     case Filter.PAST:
       return WelcomeMessage.PAST;
     case Filter.FUTURE:

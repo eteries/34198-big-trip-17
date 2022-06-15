@@ -11,17 +11,20 @@ const getUnixNum = (date) => dayjs(date).unix();
 const formatDate = (date, format) => dayjs(date).format(format);
 
 const formatPointDuration = (pointDuration) => {
-  const parsedDuration = dayjs.duration(pointDuration);
+  const days = Math.floor(dayjs.duration(pointDuration).asDays());
+  const hours = Math.floor(dayjs.duration(pointDuration -= days * 24 * 60 * 60 * 1000).asHours());
+  const minutes = Math.floor(dayjs.duration(pointDuration - hours * 60 * 60 * 1000).asMinutes());
+
   const durationElements = [
-    ['D', parsedDuration.days()],
-    ['H', parsedDuration.hours()],
-    ['M', parsedDuration.minutes()],
+    ['D', days],
+    ['H', hours],
+    ['M', minutes],
   ];
 
   return durationElements
     .reduce((acc, [label, value]) => {
       if (value) {
-        acc.push(`${value}${label}`);
+        acc.push(`${value.toString().padStart(2, '0')}${label}`);
       }
       return acc;
     }, [])
@@ -31,8 +34,8 @@ const formatPointDuration = (pointDuration) => {
 const formatTripDuration = (dateFrom , dateTo) => {
   const Format = {
     Years: `${formatDate(dateFrom, 'DD MMM YYYY')} - ${formatDate(dateTo, 'DD MMM YYYY')}`,
-    Month: `${formatDate(dateFrom, 'MMM DD')} - ${formatDate(dateTo, 'MMM DD')}`,
-    Days: `${formatDate(dateFrom, 'MMM DD')} - ${formatDate(dateTo, 'DD')}`,
+    Month: `${formatDate(dateFrom, 'DD MMM')} - ${formatDate(dateTo, 'DD MMM')}`,
+    Days: `${formatDate(dateFrom, 'DD')} - ${formatDate(dateTo, 'DD MMM')}`,
   };
 
   if (dayjs(dateFrom).year() !== dayjs(dateTo).year()) {

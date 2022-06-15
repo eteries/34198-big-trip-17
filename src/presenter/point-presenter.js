@@ -73,6 +73,7 @@ export default class PointPresenter {
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
+        isFavorite: !this.#point.isFavorite,
       });
     };
 
@@ -88,6 +89,7 @@ export default class PointPresenter {
   }
 
   #closeEditor() {
+    this.#pointEditComponent.reset();
     this.#pointEditComponent.element.replaceWith(this.#pointComponent.element);
     document.removeEventListener('keydown', this.#onEscKeyDown);
     this.#mode = Mode.Closed;

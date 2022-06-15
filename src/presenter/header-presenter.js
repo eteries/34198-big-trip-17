@@ -26,6 +26,7 @@ export default class HeaderPresenter {
 
     this.#tripModel.addObserver(this.#handleModelEvent);
     this.#destinationsModel.addObserver(this.#handleModelEvent);
+    this.#offersModel.addObserver(this.#handleModelEvent);
 
     this.#init();
   }

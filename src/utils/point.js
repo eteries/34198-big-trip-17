@@ -9,7 +9,7 @@ const mapPointToState = (point) => {
     type: point.type ?? POINT_TYPES[0],
     dateFrom: point.dateFrom ?? getToday(),
     dateTo: point.dateTo ?? getToday(),
-    basePrice: point.basePrice ?? 0,
+    basePrice: point.basePrice ?? '',
     offers: point.offers ?? [],
     destination: point.destination ?? null,
   };
@@ -38,10 +38,10 @@ const sortPoints = (points, sortType) => {
       return [...points].sort((pointA, pointB) => getDifference(pointA.dateFrom, pointB.dateFrom));
 
     case SortType.DURATION:
-      return [...points].sort((pointA, pointB) => getDuration(pointA.dateFrom, pointA.dateTo) - getDuration(pointB.dateFrom, pointB.dateTo));
+      return [...points].sort((pointA, pointB) => getDuration(pointB.dateFrom, pointB.dateTo) - getDuration(pointA.dateFrom, pointA.dateTo));
 
     case SortType.PRICE:
-      return [...points].sort((pointA, pointB) => pointA.basePrice - pointB.basePrice);
+      return [...points].sort((pointA, pointB) => pointB.basePrice - pointA.basePrice);
 
     default:
       return points;
@@ -51,10 +51,10 @@ const sortPoints = (points, sortType) => {
 const filterPoints = (points, filterType) => {
   switch (filterType) {
     case Filters.FUTURE:
-      return [...points].filter((point) => getUnixNum(point.dateFrom) > getUnixNum(new Date()));
+      return [...points].filter((point) => getUnixNum(point.dateFrom) >= getUnixNum(new Date()) || getUnixNum(point.dateTo) > getUnixNum(new Date()));
 
     case Filters.PAST:
-      return [...points].filter((point) => getUnixNum(point.dateTo) < getUnixNum(new Date()));
+      return [...points].filter((point) => getUnixNum(point.dateTo) < getUnixNum(new Date()) || (getUnixNum(point.dateTo) > getUnixNum(new Date()) && getUnixNum(point.dateFrom) < getUnixNum(new Date())));
 
     default:
       return points;
