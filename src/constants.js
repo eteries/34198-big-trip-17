@@ -57,3 +57,7 @@ export const BlockerTime = {
 export const AUTHORIZATION = 'Basic W34wERcnWOWprx';
 
 export const END_POINT = 'https://17.ecmascript.pages.academy/big-trip';
+
+export const Regex = {
+  DIGITS: /^(?:[1-9]\d*|\d)$/,
+};

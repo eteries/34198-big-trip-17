@@ -1,5 +1,6 @@
 import 'flatpickr/dist/flatpickr.min.css';
 
+import { Regex } from '../../constants';
 import AbstractStatefulView from '../../framework/view/abstract-stateful-view';
 import { getUnixNum, setDateTimePicker } from '../../utils/date';
 import { getOffersByType } from '../../utils/offers';
@@ -112,6 +113,7 @@ export default class PointEditView extends AbstractStatefulView {
     const destination = this.#destinations.find(({name}) => name === target.value);
 
     if (destination === undefined) {
+      target.value = '';
       return;
     }
 
@@ -122,7 +124,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #onPriceChange = ({target}) => {
     this._setState({
-      basePrice: parseInt(target.value, 10),
+      basePrice: Regex.DIGITS.test(target.value) ? parseInt(target.value, 10) : '',
     });
 
     this.#validatePrice();
