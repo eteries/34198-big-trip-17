@@ -19,10 +19,10 @@ export default class SortingView extends AbstractStatefulView {
 
   setSortingChangeHandler(cb) {
     this._callback.onSortingChange = cb;
-    this.element.addEventListener('change', this.#sortTypeChangeHandler);
+    this.element.addEventListener('change', this.#onSortingChange);
   }
 
-  #sortTypeChangeHandler = ({target}) => {
+  #onSortingChange = ({target}) => {
     this._callback.onSortingChange(target.dataset.sort);
   };
 
